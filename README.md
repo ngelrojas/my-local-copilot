@@ -17,3 +17,9 @@
 #### 3.
 
 3.1 how to get string selected from cursor in vscode and pass it to the function?
+
+#### 4.
+
+- part 1: create a setup file
+- part 2: create interface like chatbot
+- part 3: create functions for the interface and integration with ollama
