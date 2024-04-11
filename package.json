@@ -16,6 +16,10 @@
       {
         "command": "my-local-copilot.app",
         "title": "Load Chat"
+      },
+      {
+        "command": "my-local-copilot.openSettings",
+        "title": "Open Settings"
       }
     ]
   },
@@ -45,6 +49,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "ollama": "^0.5.0"
+    "ollama": "^0.5.0",
+    "sqlite3": "^5.1.7"
   }
 }
