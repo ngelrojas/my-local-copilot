@@ -14,6 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
     "my-local-copilot.app",
     async () => {
       const editor = vscode.window.activeTextEditor;
+
       let text = "";
 
       if (editor) {
@@ -27,7 +28,10 @@ export function activate(context: vscode.ExtensionContext) {
       });
 
       if (userInput) {
-        loadChat("mistral", userInput + text);
+        const config = vscode.workspace.getConfiguration("my-local-copilot");
+        const model = config.get("model") as string;
+
+        loadChat(model, userInput + text);
       }
     }
   );
@@ -38,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("my-local-copilot.openSettings", () => {
       const panel = vscode.window.createWebviewPanel(
         "myExtensionSettings",
-        "My local Copilot Settings",
+        "LLM Settings",
         vscode.ViewColumn.One,
         { enableScripts: true }
       );
@@ -53,13 +57,18 @@ export function activate(context: vscode.ExtensionContext) {
             case "save":
               const config =
                 vscode.workspace.getConfiguration("my-local-copilot");
-              for (let model in message.value) {
-                config.update(
-                  model,
-                  message.value[model],
+              config
+                .update(
+                  "model",
+                  message.value,
                   vscode.ConfigurationTarget.Global
-                );
-              }
+                )
+                .then(() => {
+                  vscode.window.showInformationMessage(
+                    `Model set to ${message.value}`
+                  );
+                });
+              // (err: any) => vscode.window.showErrorMessage(`${err}`);
 
               return;
           }
@@ -67,6 +76,12 @@ export function activate(context: vscode.ExtensionContext) {
         undefined,
         context.subscriptions
       );
+
+      // setTimeout(() => {
+      //   const config = vscode.workspace.getConfiguration("my-local-copilot");
+      //   const model = config.get("model") as string;
+      //   vscode.window.showInformationMessage(config.get("model") as string);
+      // }, 4000);
     })
   );
 }
@@ -76,8 +91,8 @@ async function getWebviewContent() {
   try {
     const response = await ListModels();
     response.models.forEach((model: any) => {
-      let modelValue = model.model.split(":")[0];
-      inputModels += `<label class="label-model-input"><input type="radio" id="model-llm" name="model"> ${modelValue}</label>`;
+      let modelName = model.model.split(":")[0];
+      inputModels += `<label id="model-name" class="label-model-input" for="model-llm"><input type="radio" id="model-llm" name="model"> ${modelName}</label>`;
     });
   } catch (e) {
     vscode.window.showInformationMessage(`${e}`);
@@ -96,7 +111,6 @@ async function getWebviewContent() {
 
       ${inputModels}
       
-
       <input type="submit" value="Save">
     </form>
 
@@ -105,12 +119,14 @@ async function getWebviewContent() {
 
       document.getElementById('settingsForm').addEventListener('submit', (event) => {
         event.preventDefault();
-        const radios = document.querySelectorAll('input[type="radio"]');
-        let selectedModels = {};
+        
+        let selectedModels = '';
+        const radios = document.querySelectorAll('input[name="model"]');
+        
         radios.forEach((radio) => {
-          
-            selectedModels = radio.nextSibling.textContent.trim();
-          
+          if(radio.checked){
+            selectedModels = radio.parentElement.textContent.trim();   
+          }
         });
         
         vscode.postMessage({
