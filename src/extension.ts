@@ -4,6 +4,7 @@
 import * as vscode from "vscode";
 import { loadChat } from "./app";
 import { ListModels } from "./services/listModels";
+import { checkOllamaRunningApi } from "./services/ollamaRunApi";
 // import * as fs from "fs";
 // import * as path from "path";
 
@@ -32,6 +33,17 @@ export function activate(context: vscode.ExtensionContext) {
         const model = config.get("model") as string;
 
         loadChat(model, userInput + text);
+      }
+      // check if ollama is running
+      try {
+        const isOllamaRunningApi = await checkOllamaRunningApi();
+        vscode.window.showInformationMessage(
+          `Ollama is running: ${isOllamaRunningApi}`
+        );
+      } catch (e) {
+        vscode.window.showErrorMessage(
+          `Failed to check if Ollama is running. Please ensure Ollama is installed and check if Ollama serve is running, try again.`
+        );
       }
     }
   );
@@ -68,7 +80,6 @@ export function activate(context: vscode.ExtensionContext) {
                     `Model set to ${message.value}`
                   );
                 });
-              // (err: any) => vscode.window.showErrorMessage(`${err}`);
 
               return;
           }
@@ -76,12 +87,6 @@ export function activate(context: vscode.ExtensionContext) {
         undefined,
         context.subscriptions
       );
-
-      // setTimeout(() => {
-      //   const config = vscode.workspace.getConfiguration("my-local-copilot");
-      //   const model = config.get("model") as string;
-      //   vscode.window.showInformationMessage(config.get("model") as string);
-      // }, 4000);
     })
   );
 }
@@ -90,6 +95,12 @@ async function getWebviewContent() {
   let inputModels = "";
   try {
     const response = await ListModels();
+    if (response.models.length === 0) {
+      vscode.window.showInformationMessage(
+        `Models found: ${response.models.length}`
+      );
+      return "";
+    }
     response.models.forEach((model: any) => {
       let modelName = model.model.split(":")[0];
       inputModels += `<label id="model-name" class="label-model-input" for="model-llm"><input type="radio" id="model-llm" name="model"> ${modelName}</label>`;
