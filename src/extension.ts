@@ -5,8 +5,7 @@ import * as vscode from "vscode";
 import { loadChat } from "./app";
 import { ListModels } from "./services/listModels";
 import { checkOllamaRunningApi } from "./services/ollamaRunApi";
-// import * as fs from "fs";
-// import * as path from "path";
+//TODO: import ollamaConstant
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -35,15 +34,16 @@ export function activate(context: vscode.ExtensionContext) {
         loadChat(model, userInput + text);
       }
       // check if ollama is running
+      // console.info = for future logging files, I mean, replace console,.info to logging file instead of.
+      // console.error = the same as above, with date and time.
       try {
         const isOllamaRunningApi = await checkOllamaRunningApi();
-        vscode.window.showInformationMessage(
-          `Ollama is running: ${isOllamaRunningApi}`
-        );
+        console.info(isOllamaRunningApi);
       } catch (e) {
         vscode.window.showErrorMessage(
           `Failed to check if Ollama is running. Please ensure Ollama is installed and check if Ollama serve is running, try again.`
         );
+        console.error(e);
       }
     }
   );
@@ -95,19 +95,27 @@ async function getWebviewContent() {
   let inputModels = "";
   try {
     const response = await ListModels();
+
     if (response.models.length === 0) {
       vscode.window.showInformationMessage(
         `Models found: ${response.models.length}`
       );
+      vscode.window.showInformationMessage(
+        `Please ensure that you pull the models from the Ollama server.\n
+        You can do this by running the command 'ollama pull <MODEL_NAME>' in the terminal.`
+      );
       return "";
     }
+
     response.models.forEach((model: any) => {
       let modelName = model.model.split(":")[0];
       inputModels += `<label id="model-name" class="label-model-input" for="model-llm"><input type="radio" id="model-llm" name="model"> ${modelName}</label>`;
     });
   } catch (e) {
-    vscode.window.showInformationMessage(`${e}`);
+    vscode.window.showErrorMessage(`Failed: Ollama is not running`);
+    console.error(e);
   }
+
   return `<!DOCTYPE html>
   <html lang="en">
   <style>
@@ -115,14 +123,37 @@ async function getWebviewContent() {
       display: block;
       margin: 10px 0;
     }
+    .label-title-model{
+      display: block;
+      margin: 10px 0;
+    }
+    .form-save-model{
+      display: block;
+      flex-direction: column;
+      margin: 10px 0;
+    }
+    .label-second-title{
+      display: block;
+      margin: 10px 0;
+    }
+    .section-list-models{
+      display: block;
+      margin: 10px;
+    }
+    .input-save-model{
+      display: block;
+      margin: 10px 0;
+    }
   </style>
   <body>
-    <form id="settingsForm">
-      <label for="mySetting">Model List:</label><br>
-
-      ${inputModels}
+    <form class="form-save-model" id="settingsForm">
+      <label class="label-title-model" for="mySetting">Model List:</label>
+      <label class="label-second-title" for="second-title">below is your list local models</label>
+      <section class="section-list-models">
+        ${inputModels}
+      </section>
       
-      <input type="submit" value="Save">
+      <input class="input-save-model" type="submit" value="Save">
     </form>
 
     <script>
