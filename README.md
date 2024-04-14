@@ -13,3 +13,15 @@
 1.4 create a button to refresh if a new model is installed in local machine
 1.5 preserve the data model in the local machine, when is selected.
 1.6 create a chat to test a model like a chat-copilot interface.
+
+below name suggestions for the chat-copilot interface
+-==OLLAMA_COPILOT
+-==OLLAMA_PILOT
+-==OLLAMA_CODE_PILOT
+
+### DONE
+
+- panel admin
+- input for the model chat
+- retrieve answers from model in vscode
+- selected text and send to the model and the answer is displayed in the vscode
