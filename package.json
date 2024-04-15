@@ -41,7 +41,8 @@
     "views": {
       "ollama-chat-pilot": [
         {
-          "id": "ollama-chat-pilot.view",
+          "type": "webview",
+          "id": "ollama-chat-pilot",
           "name": "Ollama Chat Pilot"
         }
       ]

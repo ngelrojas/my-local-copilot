@@ -12,19 +12,59 @@ import {
 } from "./constants/ollamaConstant";
 // import { OllamaDataProvider } from "./views/ollamaDataProvider";
 import { OllamaViewProvider } from "./views/ollamaViewProvider";
-import * as path from "node:path";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-  // #register view
-  const provider = new OllamaViewProvider(context);
-
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider("ollama-chat-pilot", provider)
+  // register a tree view
+  const provider = new OllamaViewProvider(context.extensionUri);
+  const view = vscode.window.registerWebviewViewProvider(
+    "ollama-chat-pilot.view",
+    provider
   );
 
-  // # end register view
+  const activateViewCommand = vscode.commands.registerCommand(
+    "ollama-chat-pilot.openChat",
+    () => {
+      vscode.window.showInformationMessage("My View Activated!");
+    }
+  );
+
+  context.subscriptions.push(view, activateViewCommand);
+  // const ollamaDataProvider = new OllamaDataProvider();
+  // vscode.window.registerTreeDataProvider(
+  //   "ollama-chat-pilot.view",
+  //   ollamaDataProvider
+  // );
+
+  // const activateCommand = vscode.commands.registerCommand(
+  //   "ollama-chat-pilot.activate",
+  //   () => {
+  //     vscode.window.showInformationMessage("Ollama Chat Pilot Activated!");
+  //     ollamaDataProvider.displayAllItems();
+  //   }
+  // );
+  // const activateViewCommand = vscode.commands.registerCommand(
+  //   "ollama-chat-pilot.view",
+  //   () => {
+  //     vscode.window.showInformationMessage("My View Activated!");
+  //     ollamaDataProvider.displayAllItems();
+  //   }
+  // );
+  // context.subscriptions.push(activateCommand, activateViewCommand);
+  // context.subscriptions.push(
+  //   vscode.commands.registerCommand("ollama-chat-pilot.openChat", async () => {
+  //     const panel = vscode.window.createWebviewPanel(
+  //       "ollamaChatbot", // Identifies the type of the webview. Used internally
+  //       "Ollama Chatbot", // Title of the panel displayed to the user
+  //       vscode.ViewColumn.One, // Editor column to show the new webview panel in.
+  //       {} // Webview options. More on these later.
+  //     );
+  //     panel.webview.html = await getWebviewOllamaChatPilot();
+  //   })
+  // );
+  // vscode.commands.executeCommand("ollama-chat-pilot.openChat");
+  //
   let disposable = vscode.commands.registerCommand(
     "my-local-copilot.app",
     async () => {
