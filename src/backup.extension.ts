@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 
 import * as vscode from "vscode";
-import { loadChat } from "./app";
+import { loadChat } from "./ollamaChat";
 import { ListModels } from "./services/listModels";
 import { checkOllamaRunning } from "./modules/ollamaRunning";
 import {

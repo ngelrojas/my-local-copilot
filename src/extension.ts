@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 
 import * as vscode from "vscode";
-import { loadChat } from "./app";
+import { OllamaChat } from "./ollamaChat";
 import { ListModels } from "./services/listModels";
 import { checkOllamaRunning } from "./modules/ollamaRunning";
 import {
@@ -25,6 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // # end register view
+  // TODO: remove code below because it's not used
   let disposable = vscode.commands.registerCommand(
     "my-local-copilot.app",
     async () => {
@@ -46,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
         const config = vscode.workspace.getConfiguration("my-local-copilot");
         const model = config.get("model") as string;
 
-        loadChat(model, userInput + text);
+        OllamaChat(model, userInput + " " + text);
       }
 
       checkOllamaRunning();

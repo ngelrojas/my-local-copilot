@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { OllamaChat } from "../ollamaChat";
 
 export class OllamaViewProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
@@ -25,6 +26,8 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
     const stylesMainUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this.context.extensionUri, "src/media", "main.css")
     );
+    // TODO: check output response from ollamaChat
+    const ollamaChat = OllamaChat("llama2", "say hello");
 
     return `
     <!DOCTYPE html>
@@ -63,9 +66,12 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
       <script>
         document.getElementById('send').addEventListener('click', () => {
           const input = document.getElementById('send-req-ollama-bot');
-          const chatbox = document.getElementById('req-ollama-bot-view');
-          chatbox.innerHTML += '<p>You: ' + input.value + '</p>';
+          const reqUserQues = document.getElementById('req-ollama-bot-view');
+          const resChatAns = document.getElementById('res-ollama-bot-view');
+          reqUserQues.innerHTML += '<p>You: ' + input.value + '</p>';
           input.value = '';
+          const response = ${ollamaChat};
+          resChatAns.innerHTML += '<p>ollama-bot: ' + response + '</p>';
         });
       </script>
     </body>

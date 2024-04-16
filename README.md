@@ -15,16 +15,19 @@
 1.7 interact ui interface chat with the model chat ollama
 1.7.1 refactor the loadChat into the ollamaViewProvider
 1.8 styling the chat interface
+1.9 refactor ollamaChat to ollamaChatProvider, because the ollamaChat return a response from the model chat
 
 ### suggestions name for the plugin
+
 below name suggestions for the chat-copilot interface
 -==OLLAMA_COPILOT
 -==OLLAMA_PILOT
 -==OLLAMA_CODE_PILOT
 
 ### DONE
+
 - panel admin
 - input for the model chat
 - retrieve answers from model in vscode
 - selected text and send to the model and the answer is displayed in the vscode
-1.6 create a chat to test a model like a chat-copilot interface. 
+  1.6 create a chat to test a model like a chat-copilot interface.
