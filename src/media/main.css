@@ -1,89 +1,168 @@
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-    display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 body {
-    line-height: 1;
+  line-height: 1;
 }
-ol, ul {
-    list-style: none;
+ol,
+ul {
+  list-style: none;
 }
-blockquote, q {
-    quotes: none;
+blockquote,
+q {
+  quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-    content: '';
-    content: none;
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
 }
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 /*
     styles for chat bot ollama
 */
 main {
-    display: flex;
-    flex-direction: column;
-    height: 100dvh;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  justify-content: space-between;
 }
- /*section to send request to ollama */
+/*section to send request to ollama */
 .wrap-ollama-input-btn {
-    justify-content: end;
-    width: auto;
-    display: flex;
-    margin-top: 1%;
-    margin-bottom: 1%;
+  justify-content: end;
+  width: auto;
+  display: flex;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
-.wrap-ollama-input-btn > .req-input{
-    width: 100%;
-    justify-content: flex-start;
+.wrap-ollama-input-btn > .req-input {
+  width: 100%;
+  justify-content: flex-start;
 }
-.wrap-ollama-input-btn >.req-btn{
-    width: 10%;
-    justify-content: flex-end;
-    background-color: rgba(0, 3, 37, 0.64);
-    border: 0;
+.wrap-ollama-input-btn > .req-btn {
+  width: 10%;
+  justify-content: flex-end;
+  background-color: rgba(0, 3, 37, 0.64);
+  border: 0;
 }
 
-.ollama-section-request{
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    background-color: rgba(0, 3, 37, 0.64);
-    border: .5px solid #ddd;
-    padding: 1%;
+.ollama-section-request {
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  background-color: rgba(0, 3, 37, 0.64);
+  border: 0.5px solid #ddd;
 }
 
 /*section response from ollama-bot*/
-.ollama-section-response{
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    background-color: rgba(0, 3, 37, 0.64);
-    border: .5px solid #ddd;
-    padding: 1%;
+.ollama-section-response {
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  background-color: rgba(0, 3, 37, 0.64);
+  border: 0.5px solid #ddd;
 }

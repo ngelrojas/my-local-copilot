@@ -13,13 +13,5 @@ export const OllamaChat = async (inputModel: String, inputMsg: String) => {
     ],
   });
 
-  // vscode.window.visibleTextEditors.forEach((editor) => {
-  //   editor.edit((editBuilder) => {
-  //     editBuilder.insert(
-  //       editor.selection.active,
-  //       `\n${response.message.content}`
-  //     );
-  //   });
-  // });
   return response.message.content;
 };

@@ -10,9 +10,9 @@ import {
   OLLAMA_SETTING,
   OLLAMA_MSG_INFO,
 } from "./constants/ollamaConstant";
-// import { OllamaDataProvider } from "./views/ollamaDataProvider";
+
 import { OllamaViewProvider } from "./views/ollamaViewProvider";
-import * as path from "node:path";
+
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -23,6 +23,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider("ollama-chat-pilot", provider)
   );
+
+  checkOllamaRunning();
 
   // # end register view
   // TODO: remove code below because it's not used
@@ -50,7 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
         OllamaChat(model, userInput + " " + text);
       }
 
-      checkOllamaRunning();
+      // checkOllamaRunning();
     }
   );
 

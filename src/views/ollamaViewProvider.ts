@@ -14,67 +14,74 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
     this._view = webviewView;
 
     webviewView.webview.options = {
-      // Allow scripts in the webview
       enableScripts: true,
       localResourceRoots: [this.context.extensionUri],
     };
 
-    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+    webviewView.webview.onDidReceiveMessage(
+        async (message) => {
+          switch (message.command) {
+            case 'send':
+              const config = vscode.workspace.getConfiguration("my-local-copilot");
+              const model = config.get("model") as string;
+              const response = await OllamaChat(model, message.text);
+              webviewView.webview.postMessage({ command: 'response', text: response });
+              return;
+          }
+        },
+        undefined,
+        this.context.subscriptions
+    );
+
+    (async () => {
+      webviewView.webview.html = await this._getHtmlForWebview(
+        webviewView.webview
+      );
+    })();
   }
 
-  public _getHtmlForWebview(webview: vscode.Webview) {
+  public async _getHtmlForWebview(webview: vscode.Webview) {
+    const stylesTailwindCssUri = webview.asWebviewUri(
+        vscode.Uri.joinPath(this.context.extensionUri, "src/media", "tailwind.min.css")
+    );
     const stylesMainUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this.context.extensionUri, "src/media", "main.css")
     );
-    // TODO: check output response from ollamaChat
-    const ollamaChat = OllamaChat("llama2", "say hello");
+    const scriptMainUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this.context.extensionUri, "src/media", "main.js")
+    );
+    const scriptTailwindJsUri = webview.asWebviewUri(
+        vscode.Uri.joinPath(this.context.extensionUri, "src/media", "tailwindcss.3.2.4.min.js")
+    );
+
 
     return `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href='${stylesMainUri}' rel="stylesheet">
-      <title>Ollama Chatbot</title>
-    </head>
-    <body>
-      <main>
-      
-        <section class="wrap-ollama-section">
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='${stylesTailwindCssUri}' rel="stylesheet">
+        <link href='${stylesMainUri}' rel="stylesheet">
+        <script src='${scriptTailwindJsUri}'></script>
+        <script src='${scriptMainUri}'></script>
+        <title>Ollama Chatbot</title>
+      </head>
+      <body>
+        <main>
         
-          <section class="ollama-section-request" id="req-ollama-bot-view">
-            <!-- display message user request -->
+          <section class="wrap-ollama-section" id="wrap-ollama-section">
           </section>
           
-          <section class="ollama-section-response" id="res-ollama-bot-view">
-            <!-- display message from ollama-bot-model response -->
-            response from ollama-bot-model
-          </section>
-          
-        </section>
-        
-        <section class="wrap-ollama-input-btn">
-          <input class="req-input" id="send-req-ollama-bot" type="text" placeholder="Type your message here">
-          <button class="req-btn" id="send">
+          <div class="wrap-ollama-input-btn" id="chatForm">
+            <input class="req-input text-black" id="send-req-ollama-bot" type="text" placeholder="Type your message here">
+            <button class="req-btn" id="send">
             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="darkblue" d="m12.815 12.197l-7.532 1.255a.5.5 0 0 0-.386.318L2.3 20.728c-.248.64.421 1.25 1.035.942l18-9a.75.75 0 0 0 0-1.341l-18-9c-.614-.307-1.283.303-1.035.942l2.598 6.958a.5.5 0 0 0 .386.318l7.532 1.255a.2.2 0 0 1 0 .395"/></svg>
-          </button>
-        </section>
-        
-      </main>
-
-      <script>
-        document.getElementById('send').addEventListener('click', () => {
-          const input = document.getElementById('send-req-ollama-bot');
-          const reqUserQues = document.getElementById('req-ollama-bot-view');
-          const resChatAns = document.getElementById('res-ollama-bot-view');
-          reqUserQues.innerHTML += '<p>You: ' + input.value + '</p>';
-          input.value = '';
-          const response = ${ollamaChat};
-          resChatAns.innerHTML += '<p>ollama-bot: ' + response + '</p>';
-        });
-      </script>
-    </body>
-    </html>`;
+            </button>
+          </div>
+          
+        </main>      
+      </body>
+      </html>`;
   }
 }

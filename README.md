@@ -31,3 +31,11 @@ below name suggestions for the chat-copilot interface
 - retrieve answers from model in vscode
 - selected text and send to the model and the answer is displayed in the vscode
   1.6 create a chat to test a model like a chat-copilot interface.
+
+### tip
+- to create a tailwindcss minify file, use the command below
+- first install the tailwindcss, in your project or if you have it, just go the directory
+- and run the command below
+```bash
+npx tailwindcss -i ./[styles.css or index.css] -o ./dist/tailwind.css --minify
+```
