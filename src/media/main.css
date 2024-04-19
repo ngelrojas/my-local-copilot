@@ -133,9 +133,9 @@ main {
 }
 /*section to send request to ollama */
 .wrap-ollama-input-btn {
+  display: flex;
   justify-content: end;
   width: auto;
-  display: flex;
   margin-top: 1%;
   margin-bottom: 1%;
 }

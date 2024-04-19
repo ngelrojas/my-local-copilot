@@ -1,14 +1,17 @@
-import * as vscode from "vscode";
 import ollama from "ollama";
 
-// TODO: check output response from ollama.chat
-export const OllamaChat = async (inputModel: String, inputMsg: String) => {
+interface userRequest {
+  question: string;
+  code: string;
+}
+
+export const OllamaChat = async (inputModel: String, inputMsg: userRequest) => {
   const response = await ollama.chat({
     model: `${inputModel}`,
     messages: [
       {
         role: "user",
-        content: `${inputMsg}`,
+        content: `${inputMsg.question} ${inputMsg.code}`,
       },
     ],
   });

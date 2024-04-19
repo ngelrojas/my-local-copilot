@@ -1,8 +1,4 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-
 import * as vscode from "vscode";
-import { OllamaChat } from "./ollamaChat";
 import { ListModels } from "./services/listModels";
 import { checkOllamaRunning } from "./modules/ollamaRunning";
 import {
@@ -13,50 +9,14 @@ import {
 
 import { OllamaViewProvider } from "./views/ollamaViewProvider";
 
-
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   // #register view
   const provider = new OllamaViewProvider(context);
-
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider("ollama-chat-pilot", provider)
   );
-
   checkOllamaRunning();
-
-  // # end register view
-  // TODO: remove code below because it's not used
-  let disposable = vscode.commands.registerCommand(
-    "my-local-copilot.app",
-    async () => {
-      const editor = vscode.window.activeTextEditor;
-
-      let text = "";
-
-      if (editor) {
-        let document = editor.document;
-        let selection = editor.selection;
-        text = document.getText(selection);
-      }
-
-      let userInput = await vscode.window.showInputBox({
-        prompt: "Please enter your message",
-      });
-
-      if (userInput) {
-        const config = vscode.workspace.getConfiguration("my-local-copilot");
-        const model = config.get("model") as string;
-
-        OllamaChat(model, userInput + " " + text);
-      }
-
-      // checkOllamaRunning();
-    }
-  );
-
-  context.subscriptions.push(disposable);
+  // #register view end
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
@@ -102,7 +62,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 async function getWebviewContent() {
   let inputModels = "";
+
   try {
+
     const response = await ListModels();
 
     if (response.models.length === 0) {
@@ -113,10 +75,18 @@ async function getWebviewContent() {
       return "";
     }
 
+    const config = vscode.workspace.getConfiguration("my-local-copilot");
+    const modelStored = config.get("model") as string;
+
     response.models.forEach((model: any) => {
       let modelName = model.model.split(":")[0];
-      inputModels += `<label id="model-name" class="label-model-input" for="model-llm"><input type="radio" id="model-llm" name="model"> ${modelName}</label>`;
+      if(modelStored === modelName){
+        inputModels += `<label id="model-name" class="label-model-input" for=${modelName}><input type="radio" id=${modelName} name="model" checked> ${modelName}</label>`;
+      }else{
+        inputModels += `<label id="model-name" class="label-model-input" for=${modelName}><input type="radio" id=${modelName} name="model"> ${modelName}</label>`;
+      }
     });
+
   } catch (e) {
     vscode.window.showErrorMessage(OLLAMA_MSG_ERROR.OLLAMA_NOT_RUNNING);
     console.error(e);

@@ -16,16 +16,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "my-local-copilot.app",
-        "title": "Load Chat"
-      },
-      {
         "command": "my-local-copilot.openSettings",
         "title": "Open Settings"
-      },
-      {
-        "command": "ollama-chat-pilot.openChat",
-        "title": "Open Chat"
       }
     ],
     "configuration": {
