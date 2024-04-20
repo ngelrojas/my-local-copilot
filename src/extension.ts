@@ -1,12 +1,3 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-
-//TODO:
-// 1. create a config file for ollama
-// 1.2 read a api from ollama
-// 1.3 list all models from ollama
-// 2. integrating ollama(models) with vscode
-
 import * as vscode from "vscode";
 import { loadChat } from "./app";
 // This method is called when your extension is activated
