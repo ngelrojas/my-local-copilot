@@ -24,6 +24,7 @@
 2.2: create ui interface with tailwindcss
 2.3: check how to get the context when we chat using ollama
 2.4: create a button to delete conversation, copy
+2.5: create a refresh model in settings
 
 ### suggestions name for the plugin
 

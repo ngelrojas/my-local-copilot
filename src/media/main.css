@@ -122,10 +122,14 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+/*root vars*/
+:root{
+  --border-x: 0.5px solid #ddd;
+}
 /*
     styles for chat bot ollama
 */
-main {
+main > .wrap-ol {
   display: flex;
   flex-direction: column;
   height: 100dvh;
@@ -150,19 +154,21 @@ main {
   border: 0;
 }
 
-.ollama-section-request {
-  justify-content: center;
-  align-items: center;
+.o-section-request {
   height: auto;
   background-color: rgba(0, 3, 37, 0.64);
-  border: 0.5px solid #ddd;
+  border-top: var(--border-x);
+  border-left: var(--border-x);
+  border-right: var(--border-x);
+  border-bottom: var(--border-x);
 }
 
 /*section response from ollama-bot*/
-.ollama-section-response {
-  justify-content: center;
-  align-items: center;
+.o-section-response {
   height: auto;
   background-color: rgba(0, 3, 37, 0.64);
-  border: 0.5px solid #ddd;
+  border-top: var(--border-x);
+  border-bottom: var(--border-x);
+  border-left: var(--border-x);
+  border-right: var(--border-x);
 }
