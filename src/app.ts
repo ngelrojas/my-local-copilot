@@ -12,5 +12,12 @@ export const loadChat = async (inputModel: String, inputMsg: String) => {
     ],
   });
 
-  vscode.window.showInformationMessage(response.message.content);
+  vscode.window.visibleTextEditors.forEach((editor) => {
+    editor.edit((editBuilder) => {
+      editBuilder.insert(
+        editor.selection.active,
+        `${response.message.content}\n`
+      );
+    });
+  });
 };
