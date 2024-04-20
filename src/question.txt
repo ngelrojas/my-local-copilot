@@ -1,0 +1,4 @@
+the ollamaViewProvider, has a method called _getHtmlForWebview() that render an html view and inside
+that html has an pure javascript, the html render an chatbot, my problem is how to integrate
+my ollamaChat.ts?, because the ollamaChat.ts is typescript, and inside the method _getHtmlForWebview() there is
+a javascript, could you give me and advice how to architect that files?

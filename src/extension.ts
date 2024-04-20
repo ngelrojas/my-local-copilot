@@ -1,115 +1,94 @@
 import * as vscode from "vscode";
-import { loadChat } from "./app";
 import { ListModels } from "./services/listModels";
-import { checkOllamaRunningApi } from "./services/ollamaRunApi";
-//TODO: import ollamaConstant
+import { checkOllamaRunning } from "./modules/ollamaRunning";
+import {
+  OLLAMA_MSG_ERROR,
+  OLLAMA_SETTING,
+  OLLAMA_MSG_INFO,
+} from "./constants/ollamaConstant";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+import { OllamaViewProvider } from "./views/ollamaViewProvider";
+
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand(
-    "my-local-copilot.app",
-    async () => {
-      const editor = vscode.window.activeTextEditor;
-
-      let text = "";
-
-      if (editor) {
-        let document = editor.document;
-        let selection = editor.selection;
-        text = document.getText(selection);
-      }
-
-      let userInput = await vscode.window.showInputBox({
-        prompt: "Please enter your message",
-      });
-
-      if (userInput) {
-        const config = vscode.workspace.getConfiguration("my-local-copilot");
-        const model = config.get("model") as string;
-
-        loadChat(model, userInput + text);
-      }
-      // check if ollama is running
-      // console.info = for future logging files, I mean, replace console,.info to logging file instead of.
-      // console.error = the same as above, with date and time.
-      try {
-        const isOllamaRunningApi = await checkOllamaRunningApi();
-        console.info(isOllamaRunningApi);
-      } catch (e) {
-        vscode.window.showErrorMessage(
-          `Failed to check if Ollama is running. Please ensure Ollama is installed and check if Ollama serve is running, try again.`
-        );
-        console.error(e);
-      }
-    }
+  // #register view
+  const provider = new OllamaViewProvider(context);
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider("ollama-chat-pilot", provider)
   );
-
-  context.subscriptions.push(disposable);
+  checkOllamaRunning();
+  // #register view end
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("my-local-copilot.openSettings", () => {
-      const panel = vscode.window.createWebviewPanel(
-        "myExtensionSettings",
-        "LLM Settings",
-        vscode.ViewColumn.One,
-        { enableScripts: true }
-      );
+    vscode.commands.registerCommand(
+      "my-local-copilot.openSettings",
+      async () => {
+        const panel = vscode.window.createWebviewPanel(
+          "myExtensionSettings",
+          OLLAMA_SETTING.TITLES.SETTINGS,
+          vscode.ViewColumn.One,
+          { enableScripts: true }
+        );
 
-      (async () => {
         panel.webview.html = await getWebviewContent();
-      })();
 
-      panel.webview.onDidReceiveMessage(
-        (message) => {
-          switch (message.command) {
-            case "save":
-              const config =
-                vscode.workspace.getConfiguration("my-local-copilot");
-              config
-                .update(
-                  "model",
-                  message.value,
-                  vscode.ConfigurationTarget.Global
-                )
-                .then(() => {
-                  vscode.window.showInformationMessage(
-                    `Model set to ${message.value}`
-                  );
-                });
+        panel.webview.onDidReceiveMessage(
+          (message) => {
+            switch (message.command) {
+              case "save":
+                const config =
+                  vscode.workspace.getConfiguration("my-local-copilot");
+                config
+                  .update(
+                    "model",
+                    message.value,
+                    vscode.ConfigurationTarget.Global
+                  )
+                  .then(() => {
+                    vscode.window.showInformationMessage(
+                      `${OLLAMA_MSG_INFO.MODEL_SET_TO} ${message.value}`
+                    );
+                  });
 
-              return;
-          }
-        },
-        undefined,
-        context.subscriptions
-      );
-    })
+                return;
+            }
+          },
+          undefined,
+          context.subscriptions
+        );
+      }
+    )
   );
 }
 
 async function getWebviewContent() {
   let inputModels = "";
+
   try {
+
     const response = await ListModels();
 
     if (response.models.length === 0) {
       vscode.window.showInformationMessage(
-        `Models found: ${response.models.length}`
+        `${OLLAMA_MSG_INFO.MODEL_FOUND} ${response.models.length}`
       );
-      vscode.window.showInformationMessage(
-        `Please ensure that you pull the models from the Ollama server.\n
-        You can do this by running the command 'ollama pull <MODEL_NAME>' in the terminal.`
-      );
+      vscode.window.showInformationMessage(OLLAMA_MSG_INFO.MODEL_NOT_FOUND);
       return "";
     }
 
+    const config = vscode.workspace.getConfiguration("my-local-copilot");
+    const modelStored = config.get("model") as string;
+
     response.models.forEach((model: any) => {
       let modelName = model.model.split(":")[0];
-      inputModels += `<label id="model-name" class="label-model-input" for="model-llm"><input type="radio" id="model-llm" name="model"> ${modelName}</label>`;
+      if(modelStored === modelName){
+        inputModels += `<label id="model-name" class="label-model-input" for=${modelName}><input type="radio" id=${modelName} name="model" checked> ${modelName}</label>`;
+      }else{
+        inputModels += `<label id="model-name" class="label-model-input" for=${modelName}><input type="radio" id=${modelName} name="model"> ${modelName}</label>`;
+      }
     });
+
   } catch (e) {
-    vscode.window.showErrorMessage(`Failed: Ollama is not running`);
+    vscode.window.showErrorMessage(OLLAMA_MSG_ERROR.OLLAMA_NOT_RUNNING);
     console.error(e);
   }
 
@@ -144,7 +123,7 @@ async function getWebviewContent() {
   </style>
   <body>
     <form class="form-save-model" id="settingsForm">
-      <label class="label-title-model" for="mySetting">Model List:</label>
+      <label class="label-title-model" for="mySetting">${OLLAMA_SETTING.TITLES.MODEL_LIST}</label>
       <label class="label-second-title" for="second-title">below is your list local models</label>
       <section class="section-list-models">
         ${inputModels}

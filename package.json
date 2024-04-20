@@ -9,14 +9,12 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:ollama-chat-pilot.activate"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
-      {
-        "command": "my-local-copilot.app",
-        "title": "Load Chat"
-      },
       {
         "command": "my-local-copilot.openSettings",
         "title": "Open Settings"
@@ -31,6 +29,24 @@
           "description": "Configuration for models"
         }
       }
+    },
+    "views": {
+      "ollama-chat-pilot": [
+        {
+          "type": "webview",
+          "id": "ollama-chat-pilot",
+          "name": "Ollama Chat Pilot"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ollama-chat-pilot",
+          "title": "Ollama Chat Pilot",
+          "icon": "src/images/icons/ollama-chat.svg"
+        }
+      ]
     }
   },
   "scripts": {

@@ -18,3 +18,10 @@ export const OLLAMA_MSG_ERROR = {
   OLLAMA_NOT_OR_NOT_INSTALLED:
     "Failed to check if Ollama is running. Please ensure Ollama is installed and check if Ollama serve is running, try again.",
 };
+
+export const OLLAMA_SETTING = {
+  TITLES: {
+    SETTINGS: "Settings",
+    MODEL_LIST: "Model List",
+  },
+};
