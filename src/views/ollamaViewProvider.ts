@@ -39,6 +39,16 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
               const response = await OllamaChat(model, userRequest);
               webviewView.webview.postMessage({ command: 'response', text: response });
               return;
+            case 'copy':
+              vscode.window.visibleTextEditors.forEach((editor) => {
+                editor.edit((editBuilder) => {
+                  editBuilder.insert(
+                      editor.selection.active,
+                      `${message.text}`
+                  );
+                });
+              });
+              return;
           }
         },
         undefined,
@@ -65,7 +75,7 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
     const scriptTailwindJsUri = webview.asWebviewUri(
         vscode.Uri.joinPath(this.context.extensionUri, "src/media", "tailwindcss.3.2.4.min.js")
     );
-
+    const svgSend = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="fill-gray-400" d="m12.815 12.197l-7.532 1.255a.5.5 0 0 0-.386.318L2.3 20.728c-.248.64.421 1.25 1.035.942l18-9a.75.75 0 0 0 0-1.341l-18-9c-.614-.307-1.283.303-1.035.942l2.598 6.958a.5.5 0 0 0 .386.318l7.532 1.255a.2.2 0 0 1 0 .395"/></svg>`;
 
     return `
       <!DOCTYPE html>
@@ -87,9 +97,9 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
               </section>
               
               <div class="w-full flex flex-row my-0.5" id="chatForm">
-                <input class="p-1 text-black w-5/6 rounded-l-sm" id="send-req-ollama-bot" type="text" placeholder="Type your message here">
-                <button class="p-1 bg-slate-400 w-1/6 flex justify-center rounded-r-sm" id="send">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="fill-gray-400" d="m12.815 12.197l-7.532 1.255a.5.5 0 0 0-.386.318L2.3 20.728c-.248.64.421 1.25 1.035.942l18-9a.75.75 0 0 0 0-1.341l-18-9c-.614-.307-1.283.303-1.035.942l2.598 6.958a.5.5 0 0 0 .386.318l7.532 1.255a.2.2 0 0 1 0 .395"/></svg>
+                <input class="p-1 text-black w-full rounded-l-sm" id="send-req-ollama-bot" type="text" placeholder="Type your message here">
+                <button class="p-1 bg-slate-400 w-1/7 flex justify-center rounded-r-sm" id="send">
+                    ${svgSend}
                 </button>
               </div>
             </div>
