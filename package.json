@@ -18,6 +18,10 @@
       {
         "command": "my-local-copilot.openSettings",
         "title": "Open Settings"
+      },
+      {
+        "command": "my-local-copilot.autocomplete",
+        "title": "Autocomplete with Ollama"
       }
     ],
     "configuration": {
