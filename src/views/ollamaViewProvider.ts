@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { OllamaChat } from "../ollamaChat";
+import { OllamaChat } from "../services/ollamaChat";
 
 export class OllamaViewProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
@@ -83,8 +83,8 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href='${stylesTailwindCssUri}' rel="stylesheet">
-        <link href='${stylesMainUri}' rel="stylesheet">
+        <link href='${stylesTailwindCssUri}' rel="stylesheet" />
+        <link href='${stylesMainUri}' rel="stylesheet" />
         <script src='${scriptTailwindJsUri}'></script>
         <script src='${scriptMainUri}'></script>
         <title>Ollama Chatbot</title>
