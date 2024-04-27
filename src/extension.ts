@@ -6,17 +6,25 @@ import {
   OLLAMA_SETTING,
   OLLAMA_MSG_INFO,
 } from "./constants/ollamaConstant";
-
 import { OllamaViewProvider } from "./views/ollamaViewProvider";
 
+import {completionKeys, updateVSConfig} from "./autocomplete/config";
+
+import { autocompleteCommand } from "./autocomplete/command";
+import { provideCompletionItems } from "./autocomplete/provider";
+
+updateVSConfig();
+
+vscode.workspace.onDidChangeConfiguration(updateVSConfig);
+
 export function activate(context: vscode.ExtensionContext) {
-  // #register view
+
   const provider = new OllamaViewProvider(context);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider("ollama-chat-pilot", provider)
   );
+
   checkOllamaRunning();
-  // #register view end
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
@@ -29,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
           { enableScripts: true }
         );
 
-        panel.webview.html = await getWebviewContent();
+        panel.webview.html = await getWebviewContent(panel.webview, context);
 
         panel.webview.onDidReceiveMessage(
           (message) => {
@@ -58,10 +66,42 @@ export function activate(context: vscode.ExtensionContext) {
       }
     )
   );
+    // mylocal-autocoder
+    // Register a completion provider for JavaScript files
+    const completionProvider = vscode.languages.registerCompletionItemProvider("*", {
+            provideCompletionItems
+        },
+        ...completionKeys.split("")
+    );
+    // Register a command for getting a completion from Ollama through command/keybind
+    const externalAutocompleteCommand = vscode.commands.registerTextEditorCommand(
+        "mylocal-autocoder.autocomplete",
+        (textEditor, _, cancellationToken?) => {
+            // no cancellation token from here, but there is one from completionProvider
+            autocompleteCommand(textEditor, cancellationToken);
+        }
+    );
+    // Add the commands & completion provider to the context
+    context.subscriptions.push(completionProvider);
+    context.subscriptions.push(externalAutocompleteCommand);
+
 }
 
-async function getWebviewContent() {
-  let inputModels = "";
+async function getWebviewContent(webview: vscode.Webview, context: vscode.ExtensionContext) {
+    const stylesTailwindCssUri = webview.asWebviewUri(
+        vscode.Uri.joinPath(context.extensionUri, "src/media", "tailwind.min.css")
+    );
+    const stylesSettingsUri = webview.asWebviewUri(
+        vscode.Uri.joinPath(context.extensionUri, "src/media", "settings.css")
+    );
+    const scriptTailwindJsUri = webview.asWebviewUri(
+        vscode.Uri.joinPath(context.extensionUri, "src/media", "tailwindcss.3.2.4.min.js")
+    );
+    const scriptSettingsUri = webview.asWebviewUri(
+        vscode.Uri.joinPath(context.extensionUri, "src/media", "settings.js")
+    );
+
+    let inputModels = "";
 
   try {
 
@@ -94,68 +134,48 @@ async function getWebviewContent() {
 
   return `<!DOCTYPE html>
   <html lang="en">
-  <style>
-    .label-model-input{
-      display: block;
-      margin: 10px 0;
-    }
-    .label-title-model{
-      display: block;
-      margin: 10px 0;
-    }
-    .form-save-model{
-      display: block;
-      flex-direction: column;
-      margin: 10px 0;
-    }
-    .label-second-title{
-      display: block;
-      margin: 10px 0;
-    }
-    .section-list-models{
-      display: block;
-      margin: 10px;
-    }
-    .input-save-model{
-      display: block;
-      margin: 10px 0;
-    }
-  </style>
+      <head>
+        <link href='${stylesTailwindCssUri}' rel="stylesheet" />
+        <link href='${stylesSettingsUri}' rel="stylesheet" />
+       <script src="${scriptTailwindJsUri}"></script>
+        <title>${OLLAMA_SETTING.TITLES.SETTINGS}</title>
+    </head>
+  
   <body>
-    <form class="form-save-model" id="settingsForm">
+    <form class="form-save-model p-3" id="settingsForm">
       <label class="label-title-model" for="mySetting">${OLLAMA_SETTING.TITLES.MODEL_LIST}</label>
       <label class="label-second-title" for="second-title">below is your list local models</label>
       <section class="section-list-models">
         ${inputModels}
       </section>
-      
+
       <input class="input-save-model" type="submit" value="Save">
     </form>
-
     <script>
-      const vscode = acquireVsCodeApi();
+    vscode = acquireVsCodeApi();
+    
+    document.getElementById('settingsForm').addEventListener('submit', (event) => {
+            event.preventDefault();
 
-      document.getElementById('settingsForm').addEventListener('submit', (event) => {
-        event.preventDefault();
-        
-        let selectedModels = '';
-        const radios = document.querySelectorAll('input[name="model"]');
-        
-        radios.forEach((radio) => {
-          if(radio.checked){
-            selectedModels = radio.parentElement.textContent.trim();   
-          }
+            let selectedModels = '';
+            const radios = document.querySelectorAll('input[name="model"]');
+
+            radios.forEach((radio) => {
+                if(radio.checked){
+                    selectedModels = radio.parentElement.textContent.trim();
+                }
+            });
+
+            vscode.postMessage({
+                command: 'save',
+                value: selectedModels,
+            });
         });
-        
-        vscode.postMessage({
-          command: 'save',
-          value: selectedModels,
-        });
-      });
-      
-    </script>
+</script>
+    
   </body>
   </html>`;
 }
-// This method is called when your extension is deactivated
+
 export function deactivate() {}
+
