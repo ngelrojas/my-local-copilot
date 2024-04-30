@@ -5,7 +5,7 @@ interface promptRequest {
     inputModel: string;
 }
 
-export const OllGenerate = async ({inputModel, prompt}: promptRequest) => {
+export const OllamaGenerate = async ({inputModel, prompt}: promptRequest) => {
     return await ollama.generate({
         model: `${inputModel}`,
         prompt: `${prompt}`,

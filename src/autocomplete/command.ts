@@ -59,7 +59,7 @@ export async function autocompleteCommand(textEditor: vscode.TextEditor, cancell
                     progress.report({ message: "Generating..." });
 
                     // Check for user input (cancel)
-                    if (currentPosition.line != textEditor.selection.end.line || currentPosition.character != textEditor.selection.end.character) {
+                    if (currentPosition.line !== textEditor.selection.end.line || currentPosition.character !== textEditor.selection.end.character) {
                         axiosCancelPost(); // cancel axios => cancel finished promise => close notification
                         return;
                     }

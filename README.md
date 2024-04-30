@@ -16,8 +16,6 @@ including to lava-model.
 
 3.1: create a settings to pull models from ollama, using a button or something similar, ollama should be installed an running.
 
-3.2: create autocomplete chatbot.
-
 3.3: detect the programming language and put in a box, to select the model chat.
 
 3.4: create a database to save the conversation, when the user close the vscode, the conversation is saved.
@@ -40,6 +38,10 @@ including to lava-model.
 2.4: create a button to delete conversation, copy DONE
 2.6: create a method to send msg-copy to editor DONE
 2.7: create other div into the section-chat to separate request to request-display DONE
+3.2: create autocomplete chatbot. DONE
+3.5: change ollama.chat to ollama.generate, because the .generate is more complete
+to response. DONE
+3.6: create a button to delete all conversation and send info using press enter. DONE
 
 - panel admin
 - input for the model chat
