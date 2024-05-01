@@ -66,22 +66,20 @@ export function activate(context: vscode.ExtensionContext) {
       }
     )
   );
-    // mylocal-autocoder
-    // Register a completion provider for JavaScript files
+
     const completionProvider = vscode.languages.registerCompletionItemProvider("*", {
             provideCompletionItems
         },
         ...completionKeys.split("")
     );
-    // Register a command for getting a completion from Ollama through command/keybind
+
     const externalAutocompleteCommand = vscode.commands.registerTextEditorCommand(
         "mylocal-autocoder.autocomplete",
         (textEditor, _, cancellationToken?) => {
-            // no cancellation token from here, but there is one from completionProvider
             autocompleteCommand(textEditor, cancellationToken);
         }
     );
-    // Add the commands & completion provider to the context
+
     context.subscriptions.push(completionProvider);
     context.subscriptions.push(externalAutocompleteCommand);
 
@@ -152,26 +150,26 @@ async function getWebviewContent(webview: vscode.Webview, context: vscode.Extens
       <input class="input-save-model" type="submit" value="Save">
     </form>
     <script>
-    vscode = acquireVsCodeApi();
+        vscode = acquireVsCodeApi();
+        
+        document.getElementById('settingsForm').addEventListener('submit', (event) => {
+                event.preventDefault();
     
-    document.getElementById('settingsForm').addEventListener('submit', (event) => {
-            event.preventDefault();
-
-            let selectedModels = '';
-            const radios = document.querySelectorAll('input[name="model"]');
-
-            radios.forEach((radio) => {
-                if(radio.checked){
-                    selectedModels = radio.parentElement.textContent.trim();
-                }
+                let selectedModels = '';
+                const radios = document.querySelectorAll('input[name="model"]');
+    
+                radios.forEach((radio) => {
+                    if(radio.checked){
+                        selectedModels = radio.parentElement.textContent.trim();
+                    }
+                });
+    
+                vscode.postMessage({
+                    command: 'save',
+                    value: selectedModels,
+                });
             });
-
-            vscode.postMessage({
-                command: 'save',
-                value: selectedModels,
-            });
-        });
-</script>
+    </script>
     
   </body>
   </html>`;

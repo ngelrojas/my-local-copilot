@@ -32,11 +32,12 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
                 codeSelected = document.getText(selection);
               }
               const userQuestion = message.text;
+               let conversationHistory:any = [];
               const userRequest = {
                 question: userQuestion,
                 code: codeSelected,
               };
-              const response = await OllamaChat(model, userRequest);
+              const response = await OllamaChat(model, userRequest, conversationHistory);
               webviewView.webview.postMessage({ command: 'response', text: response });
               return;
             case 'copy':
@@ -95,7 +96,7 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
             <div class="wrap-ol p-2 px-4">
             <div class="wrapp-all-conversation-ollama">
                 <div class="btn-options-ollama" id="del-all-chats">
-                    <button class="del-all-chats">delete</button>
+                    <button class="del-all-chats"></button>
                 </div>
                 <section class="wrap-ollama-section" id="wrap-ollama-section">
                 </section>

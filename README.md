@@ -4,15 +4,14 @@
 
 #### TODO
 
-2.3: check don't lose context, when we chat using ollama, in each model - create a prompting setting.
+3.0: get all configuration from ollama and put in settings-chat - create a panel
+including to lava-model.
 
 2.5: create a button refresh model in settings.
 
 2.8: ISSUE: when selected other option, like a display-plugins, the chat lost all conversation.
-2.9: include lava-model to processing images.
 
-3.0: get all configuration from ollama and put in settings-chat - create a panel
-including to lava-model.
+2.9: include lava-model to processing images.
 
 3.1: create a settings to pull models from ollama, using a button or something similar, ollama should be installed an running.
 
@@ -42,6 +41,7 @@ including to lava-model.
 3.5: change ollama.chat to ollama.generate, because the .generate is more complete
 to response. DONE
 3.6: create a button to delete all conversation and send info using press enter. DONE
+2.3: check don't lose context, when we chat using ollama, in each model - create a prompting setting. DONE
 
 - panel admin
 - input for the model chat
