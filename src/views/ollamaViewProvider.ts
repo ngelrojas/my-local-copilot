@@ -32,11 +32,12 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
                 codeSelected = document.getText(selection);
               }
               const userQuestion = message.text;
+               let conversationHistory:any = [];
               const userRequest = {
                 question: userQuestion,
                 code: codeSelected,
               };
-              const response = await OllamaChat(model, userRequest);
+              const response = await OllamaChat(model, userRequest, conversationHistory);
               webviewView.webview.postMessage({ command: 'response', text: response });
               return;
             case 'copy':
@@ -93,12 +94,19 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
         <main>
         
             <div class="wrap-ol p-2 px-4">
-              <section class="wrap-ollama-section" id="wrap-ollama-section">
-              </section>
+            <div class="wrapp-all-conversation-ollama">
+                <div class="btn-options-ollama" id="del-all-chats">
+                    <button class="del-all-chats"></button>
+                </div>
+                <section class="wrap-ollama-section" id="wrap-ollama-section">
+                </section>
+            </div>
+              
               
               <div class="w-full flex flex-row my-0.5" id="chatForm">
-                <input class="p-1 text-black w-full rounded-l-sm" id="send-req-ollama-bot" type="text" placeholder="Type your message here">
-                <button class="p-1 bg-slate-400 w-1/7 flex justify-center rounded-r-sm" id="send">
+                <textarea class="p-1 text-black w-full rounded-l-sm text-dynamic" name="" id="send-req-ollama-bot" placeholder="Type your message here" cols="30"></textarea>
+                
+                <button class="p-1 bg-slate-400 w-1/7 flex justify-center items-center rounded-r-sm" id="send">
                     ${svgSend}
                 </button>
               </div>

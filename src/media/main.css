@@ -172,3 +172,9 @@ main > .wrap-ol {
   border-left: var(--border-x);
   border-right: var(--border-x);
 }
+
+.text-dynamic{
+  resize: none;
+  min-height: 50px;
+  form-sizing: content;
+}

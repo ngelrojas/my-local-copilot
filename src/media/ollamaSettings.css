@@ -122,7 +122,9 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-
+:root{
+    --tw-background-color: #384b5c;
+}
 /*panel setting models*/
 .label-model-input{
     display: block;
@@ -148,4 +150,9 @@ table {
 .input-save-model{
     display: block;
     margin: 10px 0;
+}
+
+/*tabs*/
+.active {
+    background-color: var(--tw-background-color)!important;
 }
