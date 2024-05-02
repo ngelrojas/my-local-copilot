@@ -22,6 +22,14 @@ export const OLLAMA_MSG_ERROR = {
 export const OLLAMA_SETTING = {
   TITLES: {
     SETTINGS: "Settings",
-    MODEL_LIST: "Model List",
+    MODEL_LIST: "List",
   },
+  MENU: {
+    MODEL: "Models",
+    PARAMETERS: "Parameters",
+  },
+  SUB_MENU:{
+    TOKENS: "Tokens",
+    WIN_SIZE: "Window Size",
+  }
 };
