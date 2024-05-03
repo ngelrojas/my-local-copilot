@@ -150,7 +150,9 @@ async function getWebviewContent(webview: vscode.Webview, context: vscode.Extens
     </head>
   
   <body>
+    <main>
     
+
 <!--    tabs begging-->
 <div class="relative mx-auto min-h-screen max-w-3xl text-gray-300">
   <div class="flex p-4 gap-x-4">
@@ -165,6 +167,7 @@ async function getWebviewContent(webview: vscode.Webview, context: vscode.Extens
 <!--      <div data-tab-id="nethouse" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">Net House Summary</div>-->
 <!--      <div data-tab-id="history" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">History</div>-->
     </div>
+    
     <div class="flex-grow border p-2 pl-10 text-sm">
       <div class="tabContent flex flex-col gap-y-4" id="models">
       
@@ -190,7 +193,54 @@ async function getWebviewContent(webview: vscode.Webview, context: vscode.Extens
         
       </div>
       <div class="tabContent hidden" id="parameters">
-        <div class="mb-4 text-lg">${OLLAMA_SETTING.SUB_MENU.TOKENS}</div>
+        <div class="flex py-2">
+          <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.NUMBER_PREDICTION}</span>
+          <label for="tokens-toggle" class="relative inline-flex cursor-pointer items-center">
+            <input id="tokens-toggle" type="number" value="1000" min="1000" name="tokens" class="text-black p-1 rounded" />
+          </label>
+        </div>
+        <div class="flex py-2">
+            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.WIN_SIZE}</span>
+            <label for="windows_size-toggle" class="relative inline-flex cursor-pointer items-center">
+                <input id="widdows_size-toggle" type="number" value="2048" min="2048" name="window_size" class="text-black p-1 rounded" />
+            </label>
+        </div>
+        <div class="flex py-2">
+            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.KEY_COMPLETION}</span>
+            <label for="completion-toggle" class="relative inline-flex cursor-pointer items-center">
+                <input id="completion-toggle" type="text" value=" "  name="completion" class="text-black p-1 rounded" />
+            </label>
+        </div>
+        <div class="flex py-2">
+            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.PREVIEW}</span>
+            <label for="preview" class="relative inline-flex cursor-pointer items-center">
+                <input id="preview" type="checkbox"  name="preview" class="text-black p-1 rounded" checked />
+            </label>
+        </div>
+        <div class="flex py-2">
+            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.MAX_TOKENS}</span>
+            <label for="max_tokens_pre-toggle" class="relative inline-flex cursor-pointer items-center">
+                <input id="max_tokens_pre-toggle" type="number" value="50" min="50"  name="max_tokens_pre" class="text-black p-1 rounded" />
+            </label>
+        </div>
+        <div class="flex py-2">
+            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.DELAY}</span>
+            <label for="delay-toggle" class="relative inline-flex cursor-pointer items-center">
+                <input id="delay-toggle" type="number" value="1" min="1"  name="max_tokens_pre" class="text-black p-1 rounded" />
+            </label>
+        </div>
+        <div class="flex py-2">
+            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.INLINE}</span>
+            <label for="inline" class="relative inline-flex cursor-pointer items-center">
+                <input id="inline" type="checkbox" name="inline" class="text-black p-1 rounded" checked />
+            </label>
+        </div>
+        <div class="flex py-2">
+            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.INLINE}</span>
+            <label for="temperature-toggle" class="relative inline-flex cursor-pointer items-center">
+                <input id="temperature-toggle" type="number" value="0.5" min="0" name="temperature" class="text-black p-1 rounded" checked />
+            </label>
+        </div>
       </div>
 <!--      <div class="tabContent hidden" id="performance">performance options</div>-->
 <!--      <div class="tabContent hidden" id="holdings">holdings options</div>-->
@@ -203,7 +253,7 @@ async function getWebviewContent(webview: vscode.Webview, context: vscode.Extens
   </div>
 </div>
 <!--tabs end-->
-    
+    </main>
   </body>
   </html>`;
 }
