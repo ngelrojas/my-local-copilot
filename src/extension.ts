@@ -8,7 +8,10 @@ import {
 } from "./constants/ollamaConstant";
 import { OllamaViewProvider } from "./views/ollamaViewProvider";
 
-import {completionKeys, updateVSConfig} from "./autocomplete/config";
+import {completionKeys, apiTemperature, numPredict, promptWindowSize,
+        responsePreview, responsePreviewMaxTokens, responsePreviewDelay,
+        continueInline, updateVSConfig
+} from "./autocomplete/config";
 
 import { autocompleteCommand } from "./autocomplete/command";
 import { provideCompletionItems } from "./autocomplete/provider";
@@ -85,8 +88,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 }
 
-async function retrieveModelList(inputModels: string) {
+function getParameters(){
 
+}
+
+async function retrieveModelList(inputModels: string) {
 
     try {
 
@@ -110,7 +116,6 @@ async function retrieveModelList(inputModels: string) {
                 inputModels += `<label id="model-name" class="label-model-input" for=${modelName}><input type="radio" id=${modelName} name="model" checked> ${modelName}</label>`;
             }else{
                 inputModels += `<label id="model-name" class="label-model-input" for=${modelName}><input type="radio" id=${modelName} name="model" /> ${modelName}</label>`;
-
             }
         });
 
@@ -152,107 +157,85 @@ async function getWebviewContent(webview: vscode.Webview, context: vscode.Extens
   <body>
     <main>
     
-
-<!--    tabs begging-->
-<div class="relative mx-auto min-h-screen max-w-3xl text-gray-300">
-  <div class="flex p-4 gap-x-4">
-    <div class="flex w-1/3 flex-col gap-y-2 border p-2">
-      <div data-tab-id="models" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500 active">${OLLAMA_SETTING.MENU.MODEL}</div>
-      <div data-tab-id="parameters" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">${OLLAMA_SETTING.MENU.PARAMETERS}</div>
-<!--      <div data-tab-id="performance" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">Performance Chart</div>-->
-<!--      <div data-tab-id="holdings" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">Top Holdings</div>-->
-<!--      <div data-tab-id="interest" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">Short Interest</div>-->
-<!--      <div data-tab-id="analyst" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">Current Analyst Rating</div>-->
-<!--      <div data-tab-id="regional" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">Regional Volume</div>-->
-<!--      <div data-tab-id="nethouse" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">Net House Summary</div>-->
-<!--      <div data-tab-id="history" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">History</div>-->
-    </div>
+        <div class="relative mx-auto min-h-screen max-w-3xl text-gray-300">
+          <div class="flex p-4 gap-x-4">
+            <div class="flex w-1/3 flex-col gap-y-2 border p-2">
+              <div data-tab-id="models" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500 active">${OLLAMA_SETTING.MENU.MODEL}</div>
+              <div data-tab-id="parameters" class="tab bg-gray-600 px-2 leading-loose hover:cursor-pointer hover:bg-gray-500">${OLLAMA_SETTING.MENU.PARAMETERS}</div>
+            </div>
     
     <div class="flex-grow border p-2 pl-10 text-sm">
       <div class="tabContent flex flex-col gap-y-4" id="models">
-      
-        <div class="mb-4 text-lg">${OLLAMA_SETTING.TITLES.MODEL_LIST}</div>
         <div class="flex">
           <form class="form-save-model" id="settingsForm">
               <section class="section-list-models-">
                 ${ListInputModels}
               </section>
-              <input class="input-save-model bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" type="submit" value="Save">
+              <button type="submit" class="input-save-model bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">save</button>
           </form>
-        </div>
-        
-<!--        <div class="flex"><span class="basis-1/3">Color:</span><input type="color" name="color" class="px-2 py-1" /></div>-->
-<!--        <div class="flex">-->
-<!--          <span class="basis-1/3 whitespace-nowrap">All Sections included:</span>-->
-<!--          <label for="profile-toggle" class="relative inline-flex cursor-pointer items-center">-->
-<!--            <input id="profile-toggle" type="checkbox" value="on" name="profile" class="peer sr-only" />-->
-<!--            <div class="peer h-4 w-9 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-4 after:w-4 after:rounded-full after:border after:border-gray-300 after:bg-gray-800 after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:border-blue-600 peer-checked:after:translate-x-full peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"></div>-->
-<!--            <span class="font-mediumm ml-3 text-sm dark:text-gray-300">On</span>-->
-<!--          </label>-->
-<!--        </div>-->
-        
+        </div>  
       </div>
+      
       <div class="tabContent hidden" id="parameters">
-        <div class="flex py-2">
-          <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.NUMBER_PREDICTION}</span>
-          <label for="tokens-toggle" class="relative inline-flex cursor-pointer items-center">
-            <input id="tokens-toggle" type="number" value="1000" min="1000" name="tokens" class="text-black p-1 rounded" />
-          </label>
-        </div>
-        <div class="flex py-2">
-            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.WIN_SIZE}</span>
-            <label for="windows_size-toggle" class="relative inline-flex cursor-pointer items-center">
-                <input id="widdows_size-toggle" type="number" value="2048" min="2048" name="window_size" class="text-black p-1 rounded" />
-            </label>
-        </div>
-        <div class="flex py-2">
-            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.KEY_COMPLETION}</span>
-            <label for="completion-toggle" class="relative inline-flex cursor-pointer items-center">
-                <input id="completion-toggle" type="text" value=" "  name="completion" class="text-black p-1 rounded" />
-            </label>
-        </div>
-        <div class="flex py-2">
-            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.PREVIEW}</span>
-            <label for="preview" class="relative inline-flex cursor-pointer items-center">
-                <input id="preview" type="checkbox"  name="preview" class="text-black p-1 rounded" checked />
-            </label>
-        </div>
-        <div class="flex py-2">
-            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.MAX_TOKENS}</span>
-            <label for="max_tokens_pre-toggle" class="relative inline-flex cursor-pointer items-center">
-                <input id="max_tokens_pre-toggle" type="number" value="50" min="50"  name="max_tokens_pre" class="text-black p-1 rounded" />
-            </label>
-        </div>
-        <div class="flex py-2">
-            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.DELAY}</span>
-            <label for="delay-toggle" class="relative inline-flex cursor-pointer items-center">
-                <input id="delay-toggle" type="number" value="1" min="1"  name="max_tokens_pre" class="text-black p-1 rounded" />
-            </label>
-        </div>
-        <div class="flex py-2">
-            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.INLINE}</span>
-            <label for="inline" class="relative inline-flex cursor-pointer items-center">
-                <input id="inline" type="checkbox" name="inline" class="text-black p-1 rounded" checked />
-            </label>
-        </div>
-        <div class="flex py-2">
-            <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.INLINE}</span>
-            <label for="temperature-toggle" class="relative inline-flex cursor-pointer items-center">
-                <input id="temperature-toggle" type="number" value="0.5" min="0" name="temperature" class="text-black p-1 rounded" checked />
-            </label>
-        </div>
+          <form id="parametersForm">
+            <div class="flex py-2">
+               <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.NUMBER_PREDICTION}</span>
+              <label for="numPredict" class="relative inline-flex cursor-pointer items-center">
+                <input id="numPredict" type="number" value=${numPredict} min="1000" name="numPredict" class="text-black p-1 rounded ml-10" />
+              </label>
+            </div>
+            <div class="flex py-2">
+                <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.WIN_SIZE}</span>
+                <label for="promptWindowSize" class="relative inline-flex cursor-pointer items-center">
+                    <input id="promptWindowSize" type="number" value=${promptWindowSize} min="2048" name="promptWindowSize" class="text-black p-1 ml-10 rounded" />
+                </label>
+            </div>
+            <div class="flex py-2">
+                <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.KEY_COMPLETION}</span>
+                <label for="completionKeys" class="relative inline-flex cursor-pointer items-center">
+                    <input id="completionKeys" type="text" value=${JSON.stringify(completionKeys)}  name="completionKeys" class="text-black p-1 rounded ml-10" />
+                </label>
+            </div>
+            <div class="flex py-2">
+                <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.PREVIEW}</span>
+                <label for="responsePreview" class="relative inline-flex cursor-pointer items-center">    
+                    <input id="responsePreview" type="checkbox"  name="responsePreview" class="ml-10 p-2" ${ responsePreview ? 'checked' : ''} />
+                </label>
+            </div>
+            <div class="flex py-2">
+                <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.MAX_TOKENS}</span>
+                <label for="responsePreviewMaxTokens" class="relative inline-flex cursor-pointer items-center">
+                    <input id="responsePreviewMaxTokens" type="number" value=${responsePreviewMaxTokens} min="50"  name="responsePreviewMaxTokens" class="text-black p-1 rounded ml-10" />
+                </label>
+            </div>
+            <div class="flex py-2">
+                <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.DELAY}</span>
+                <label for="responsePreviewDelay" class="relative inline-flex cursor-pointer items-center">
+                    <input id="responsePreviewDelay" type="number" value=${responsePreviewDelay} min="1"  name="responsePreviewDelay" class="text-black p-1 rounded ml-10" />
+                </label>
+            </div>
+            <div class="flex py-2">
+                <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.INLINE}</span>
+                <label for="continueInline" class="relative inline-flex cursor-pointer items-center">
+                    <input id="continueInline" type="checkbox" name="continueInline" class="text-black p-1 ml-10 rounded" ${continueInline ? 'checked': ''} />
+                </label>
+            </div>
+            <div class="flex py-2">
+                <span class="basis-1/3 whitespace-nowrap">${OLLAMA_SETTING.SUB_MENU.TEMPERATURE}</span>
+                <label for="apiTemperature" class="relative inline-flex cursor-pointer items-center">
+                    <input id="apiTemperature" type="number" value=${apiTemperature} min="0.1" step="0.1" max="1" name="apiTemperature" class="text-black p-1 rounded ml-10" />
+                </label>
+            </div>
+            <div class="flex py-2">
+                <button type="submit" class="input-save-model bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">save</button>
+            </div>
+          </form>
       </div>
-<!--      <div class="tabContent hidden" id="performance">performance options</div>-->
-<!--      <div class="tabContent hidden" id="holdings">holdings options</div>-->
-<!--      <div class="tabContent hidden" id="interest">interest options</div>-->
-<!--      <div class="tabContent hidden" id="analyst">analyst options</div>-->
-<!--      <div class="tabContent hidden" id="regional">regional options</div>-->
-<!--      <div class="tabContent hidden" id="nethouse">nethouse options</div>-->
-<!--      <div class="tabContent hidden" id="history">history options</div>-->
+      
     </div>
   </div>
 </div>
-<!--tabs end-->
+
     </main>
   </body>
   </html>`;

@@ -68,7 +68,7 @@
         },
         "mylocal-autocoder.prompt window size": {
           "type": "integer",
-          "default": 2000,
+          "default": 2048,
           "description": "The size of the prompt in characters. NOT tokens, so can be set about 1.5-2x the max tokens of the model (varies)."
         },
         "mylocal-autocoder.completion keys": {

@@ -1,4 +1,5 @@
 import ollama from "ollama";
+import { numPredict, apiTemperature } from "../autocomplete/config";
 
 interface userRequest {
   question: string;
@@ -20,6 +21,10 @@ export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conv
   const response = await ollama.chat({
     model: `${inputModel}`,
     messages: conversationHistory,
+    options: {
+        num_predict: numPredict,
+        temperature: apiTemperature,
+    },
   });
 
   conversationHistory.push(
