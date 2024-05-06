@@ -125,6 +125,7 @@ table {
 /*root vars*/
 :root{
   --border-x: 0.5px solid #ddd;
+  --text-wrap: pretty;
 }
 /*
     styles for chat bot ollama
@@ -177,4 +178,15 @@ main > .wrap-ol {
   resize: none;
   min-height: 50px;
   form-sizing: content;
+}
+
+.code-pre{
+  border: 1px solid;
+  padding: 1%;
+  background: #353434;
+  margin: 1%!important;
+  text-wrap: var(--text-wrap);
+}
+.code-pre > pre{
+  text-wrap: var(--text-wrap);
 }

@@ -4,9 +4,10 @@ import {
     apiModel, apiTemperature, continueInline,
     promptWindowSize,
     responsePreview,
-    responsePreviewDelay,
-    responsePreviewMaxTokens
+    responsePreviewDelay
 } from "./config";
+let {responsePreviewMaxTokens} = require('./config');
+responsePreviewMaxTokens = parseInt(responsePreviewMaxTokens);
 import axios from "axios";
 import {messageHeaderSub} from "./MessageHeaderSub";
 
@@ -47,7 +48,7 @@ export async function provideCompletionItems(document: vscode.TextDocument, posi
             })
         });
 
-        if (response_preview.data.response.trim() != "") { // default if empty
+        if (response_preview.data.response.trim() !== "") { // default if empty
             item.label = response_preview.data.response.trimStart(); // tended to add whitespace at the beginning
             item.insertText = response_preview.data.response.trimStart();
         }

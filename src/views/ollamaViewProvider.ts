@@ -93,25 +93,27 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
       <body>
         <main>
         
-            <div class="wrap-ol p-2 px-4">
-            <div class="wrapp-all-conversation-ollama">
-                <div class="btn-options-ollama" id="del-all-chats">
-                    <button class="del-all-chats"></button>
-                </div>
-                <section class="wrap-ollama-section" id="wrap-ollama-section">
-                </section>
-            </div>
+            <div class="relative wrap-ol">
+            
+              <div class="overflow-scroll mb-12 wrapp-all-conversation-ollama">
+                  <div class="sticky top-0 btn-options-ollama" id="del-all-chats">
+                      <button class="del-all-chats"></button>
+                  </div>
+                  <section class="wrap-ollama-section mt-8" id="wrap-ollama-section">
+                  </section>
+              </div>
               
               
-              <div class="w-full flex flex-row my-0.5" id="chatForm">
+              <div class="absolute bottom-0 w-full flex flex-row my-0.5" id="chatForm">
                 <textarea class="p-1 text-black w-full rounded-l-sm text-dynamic" name="" id="send-req-ollama-bot" placeholder="Type your message here" cols="30"></textarea>
                 
                 <button class="p-1 bg-slate-400 w-1/7 flex justify-center items-center rounded-r-sm" id="send">
                     ${svgSend}
                 </button>
               </div>
+              
             </div>
-          
+ 
         </main>      
       </body>
       </html>`;

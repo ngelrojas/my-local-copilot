@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.registerWebviewViewProvider("ollama-chat-pilot", provider)
   );
 
-  checkOllamaRunning();
+    checkOllamaRunning();
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
@@ -59,8 +59,20 @@ export function activate(context: vscode.ExtensionContext) {
                       `${OLLAMA_MSG_INFO.MODEL_SET_TO} ${message.value}`
                     );
                   });
-
-                return;
+                break;
+              case 'saveParameters':
+                  const configParameters =
+                      vscode.workspace.getConfiguration("mylocal-autocoder");
+                    configParameters.update('max tokens predicted',message.value.maxTokensPredicted, vscode.ConfigurationTarget.Global);
+                    configParameters.update('prompt window size',message.value.promptWindowSize, vscode.ConfigurationTarget.Global);
+                    configParameters.update('completion keys',message.value.completionKeys, vscode.ConfigurationTarget.Global);
+                    configParameters.update('response preview',message.value.responsePreview, vscode.ConfigurationTarget.Global);
+                    configParameters.update('preview max tokens',message.value.previewMaxTokens, vscode.ConfigurationTarget.Global);
+                    configParameters.update('preview delay',message.value.previewDelay, vscode.ConfigurationTarget.Global);
+                    configParameters.update('continue inline',message.value.continueInline, vscode.ConfigurationTarget.Global);
+                    configParameters.update('temperature',message.value.temperature, vscode.ConfigurationTarget.Global);
+                    vscode.window.showInformationMessage('Parameters saved successfully!');
+                    return;
             }
           },
           undefined,
@@ -85,10 +97,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(completionProvider);
     context.subscriptions.push(externalAutocompleteCommand);
-
-}
-
-function getParameters(){
 
 }
 

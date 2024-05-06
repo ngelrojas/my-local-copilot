@@ -44,17 +44,20 @@
             event.preventDefault();
 
             const parameters = {
-                'numPredict': document.getElementById('numPredict').value,
+                'maxTokensPredicted': document.getElementById('numPredict').value,
                 'promptWindowSize': document.getElementById('promptWindowSize').value,
                 'completionKeys': document.getElementById('completionKeys').value,
                 'responsePreview': document.getElementById('responsePreview').checked,
-                'responsePreviewMaxTokens': document.getElementById('responsePreviewMaxTokens').value,
-                'responsePreviewDelay': document.getElementById('responsePreviewDelay').value,
+                'previewMaxTokens': document.getElementById('responsePreviewMaxTokens').value,
+                'previewDelay': document.getElementById('responsePreviewDelay').value,
                 'continueInline': document.getElementById('continueInline').checked,
-                'apiTemperature': parseFloat(document.getElementById('apiTemperature').value),
+                'temperature': parseFloat(document.getElementById('apiTemperature').value),
             };
-            console.log('HERE PAREMETERS',parameters);
 
+            vscode.postMessage({
+                command: 'saveParameters',
+                value: parameters,
+            });
 
         });
 

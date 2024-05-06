@@ -43,7 +43,6 @@
           const botAvatar = document.createElement("div");
           botAvatar.id=`bot-avatar-${counter}`;
           botAvatar.className="bot-avatar";
-          // botAvatar.textContent="🤖";
           botAvatar.innerHTML = svgBot;
 
           const btnCpyMsg = document.createElement("button");
@@ -59,7 +58,13 @@
           document.getElementById(`res-ollama-bot-view-${counter}`).appendChild(groupBtnCpyMsg);
           document.getElementById(`group-btn-cpy-msg-${counter}`).appendChild(botAvatar);
           document.getElementById(`group-btn-cpy-msg-${counter}`).appendChild(btnCpyMsg);
-          botResponse.innerHTML += `<p id="res-current-bot-o-${counter}">${message.text}</p>`;
+
+            let formattedMessage = message.text.replace(/<pre>/g, `<pre id='code-${counter}'>`);
+            // let formattedMessage = message.text.replace(/(<pre id='code-\d+')>/g, function(match) {
+            //     return `${match}-${counter}>`;
+            // });
+            formattedMessage = formattedMessage.replace(/<button>/g, `<button id='cpy-pre-${counter}' type="button" class="rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400">`);
+            botResponse.innerHTML += `<div id="res-current-bot-o-${counter}">${formattedMessage}</div>`;
 
           const actionBtnCpyMsg = document.getElementById(`btn-cpy-msg-${counter}`);
           actionBtnCpyMsg.addEventListener("click", (event) => {
@@ -67,11 +72,24 @@
             const cpyTextMsg = document.getElementById(`res-current-bot-o-${counterValue}`).textContent;
             navigator.clipboard.writeText(cpyTextMsg).then(function () {
               vscode.postMessage({ command: "copy", text: cpyTextMsg });
-              console.log('Async: Copying to clipboard was successful!');
+              console.info('Async: Copying to clipboard was successful!');
             }, function (err) {
               console.error('Async: Could not copy text: ', err);
             });
           });
+
+          const actionBtnCpyPre = document.getElementById(`cpy-pre-${counter}`);
+          actionBtnCpyPre.addEventListener("click", (event) => {
+            let counterValue = btnCpyMsg.getAttribute("data-counter");
+            const cpyTextMsg = document.getElementById(`code-${counterValue}`).textContent;
+            navigator.clipboard.writeText(cpyTextMsg).then(function () {
+              vscode.postMessage({ command: "copy", text: cpyTextMsg });
+              console.info('Async: Copying to clipboard was successful!');
+            }, function (err) {
+              console.error('Async: Could not copy text: ', err);
+            });
+          });
+
           break;
       }
     });
@@ -139,7 +157,7 @@
           const cpyText = document.getElementById(`req-current-bot-o-${counterValue}`).textContent;
           navigator.clipboard.writeText(cpyText).then(function () {
             vscode.postMessage({ command: "copy", text: cpyText });
-            console.log('Async: Copying to clipboard was successful!');
+            console.info('Async: Copying to clipboard was successful!');
           }, function (err) {
             console.error('Async: Could not copy text: ', err);
           });
