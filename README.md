@@ -6,8 +6,9 @@
 
 3.0: get all configuration from ollama and put in settings-chat - create a panel
 including to lava-model.
--- create parameters to chat.
--- create parameters to the autocomplete.
+--- send to save parameters. DONE
+-- create parameters to chat, the moment both are the same settings. DONE
+-- create parameters to the autocomplete, the moment both are the same settings. DONE
 
 2.5: create a button refresh model in settings.
 

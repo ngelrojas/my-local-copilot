@@ -1,5 +1,9 @@
 import vscode from "vscode";
-import {apiEndpoint, apiModel, apiTemperature, numPredict, promptWindowSize} from "./config";
+import {apiEndpoint, apiModel, apiTemperature, promptWindowSize} from "./config";
+
+let {numPredict} = require('./config');
+numPredict = parseInt(numPredict);
+
 import axios from "axios";
 import {messageHeaderSub} from "./MessageHeaderSub";
 

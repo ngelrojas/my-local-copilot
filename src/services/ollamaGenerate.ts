@@ -1,4 +1,5 @@
 import ollama from "ollama";
+import {apiTemperature, numPredict} from "../autocomplete/config";
 
 interface promptRequest {
     prompt: string;
@@ -12,8 +13,8 @@ export const OllamaGenerate = async ({inputModel, prompt}: promptRequest) => {
         stream: true,
         raw: true,
         options: {
-            num_predict: 1000,
-            temperature: 0.5,
+            num_predict: numPredict,
+            temperature: apiTemperature,
             stop: ["```"]
         }
     });

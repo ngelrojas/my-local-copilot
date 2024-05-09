@@ -29,7 +29,13 @@ export const OLLAMA_SETTING = {
     PARAMETERS: "Parameters",
   },
   SUB_MENU:{
-    TOKENS: "Tokens",
+    NUMBER_PREDICTION: "Number Prediction",
     WIN_SIZE: "Window Size",
+    KEY_COMPLETION: "Key Completion",
+    PREVIEW: "Preview response",
+    MAX_TOKENS: "Max Tokens preview",
+    DELAY: "Delay",
+    INLINE: "Inline",
+    TEMPERATURE: "Temperature",
   }
 };
