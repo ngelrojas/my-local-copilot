@@ -40,14 +40,18 @@ export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conv
       response.message.content = response.message.content.replace(match, modifiedMatch);
     });
   }
+
   let splitContent = response.message.content.split(/<\/?pre>/);
+  let counter = 0;
   for (let i = 0; i < splitContent.length; i++) {
+    counter = counter + 1;
     if (i % 2 === 0) {
       splitContent[i] = '<p>' + splitContent[i] + '</p>';
     } else {
-      splitContent[i] = `<div class="code-pre"><div class="flex justify-end"><button>${svgCopy}</button></div><pre>` + splitContent[i] + `</pre></div>`;
+      splitContent[i] = `<div class="code-pre"><div class="flex justify-end"><button id='cpy-pre-${counter}' data-counter='${counter}' type="button" class="rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400">${svgCopy}</button></div><pre id='code-${counter}'>` + splitContent[i] + `</pre></div>`;
     }
   }
+
   const formattedContent = splitContent.join("");
 
   conversationHistory.push(

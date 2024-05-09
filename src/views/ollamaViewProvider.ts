@@ -77,6 +77,7 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
         vscode.Uri.joinPath(this.context.extensionUri, "src/media", "tailwindcss.3.2.4.min.js")
     );
     const svgSend = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="fill-gray-400" d="m12.815 12.197l-7.532 1.255a.5.5 0 0 0-.386.318L2.3 20.728c-.248.64.421 1.25 1.035.942l18-9a.75.75 0 0 0 0-1.341l-18-9c-.614-.307-1.283.303-1.035.942l2.598 6.958a.5.5 0 0 0 .386.318l7.532 1.255a.2.2 0 0 1 0 .395"/></svg>`;
+    const svgDelete = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z"/></svg>`;
 
     return `
       <!DOCTYPE html>
@@ -96,8 +97,8 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
             <div class="relative wrap-ol">
             
               <div class="overflow-scroll mb-12 wrapp-all-conversation-ollama">
-                  <div class="sticky top-0 btn-options-ollama" id="del-all-chats">
-                      <button class="del-all-chats"></button>
+                  <div class="sticky top-0 flex justify-end bg-slate-800 p-2 btn-options-ollama" id="del-all-chats">
+                      <button class="del-all-chats">${svgDelete}</button>
                   </div>
                   <section class="wrap-ollama-section mt-8" id="wrap-ollama-section">
                   </section>

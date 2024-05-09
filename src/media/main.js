@@ -11,7 +11,7 @@
     const sendButton = document.getElementById("send");
     const requestInput = document.getElementById("send-req-ollama-bot");
 
-    if(sendButton && requestInput){
+    if (sendButton && requestInput) {
       sendButton.addEventListener("click", sendInfoChat);
       requestInput.addEventListener("keypress", (event) => {
         if (event.key === "Enter") {
@@ -22,12 +22,13 @@
     }
 
     const removeAllChats = document.getElementById("del-all-chats");
-    removeAllChats.innerHTML = svgDelete;
     if (removeAllChats) {
-        removeAllChats.addEventListener("click", (event) => {
-            const wrapOllamaSection = document.getElementById("wrap-ollama-section");
-            wrapOllamaSection.innerHTML = "";
-        });
+      removeAllChats.addEventListener("click", (event) => {
+        const wrapOllamaSection = document.getElementById(
+          "wrap-ollama-section"
+        );
+        wrapOllamaSection.innerHTML = "";
+      });
     }
 
     window.addEventListener("message", (event) => {
@@ -37,132 +38,194 @@
           const botResponse = document.createElement("section");
 
           const groupBtnCpyMsg = document.createElement("div");
-          groupBtnCpyMsg.id=`group-btn-cpy-msg-${counter}`;
-          groupBtnCpyMsg.className="group-btn-cpy-msg flex justify-between mb-1.5";
+          groupBtnCpyMsg.id = `group-btn-cpy-msg-${counter}`;
+          groupBtnCpyMsg.className = "group-btn-cpy-msg flex justify-between mb-1.5";
 
           const botAvatar = document.createElement("div");
-          botAvatar.id=`bot-avatar-${counter}`;
-          botAvatar.className="bot-avatar";
+          botAvatar.id = `bot-avatar-${counter}`;
+          botAvatar.className = "bot-avatar";
           botAvatar.innerHTML = svgBot;
 
           const btnCpyMsg = document.createElement("button");
-          btnCpyMsg.id=`btn-cpy-msg-${counter}`;
-          btnCpyMsg.className="btn-cpy-msg rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400 p-0.5";
-          btnCpyMsg.title="copy";
+          btnCpyMsg.id = `btn-cpy-msg-${counter}`;
+          btnCpyMsg.className =
+            "btn-cpy-msg rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400 p-0.5";
+          btnCpyMsg.title = "copy";
           btnCpyMsg.innerHTML = svgCopy;
           btnCpyMsg.setAttribute("data-counter", `${counter}`);
 
           botResponse.id = `res-ollama-bot-view-${counter}`;
-          botResponse.className = "o-section-response border-x border-b pt-1 pb-0.5 px-1.5 mb-1";
-          document.getElementById(`wrap-ollama-conversation-${counter}`).appendChild(botResponse);
-          document.getElementById(`res-ollama-bot-view-${counter}`).appendChild(groupBtnCpyMsg);
-          document.getElementById(`group-btn-cpy-msg-${counter}`).appendChild(botAvatar);
-          document.getElementById(`group-btn-cpy-msg-${counter}`).appendChild(btnCpyMsg);
+          botResponse.className =
+            "o-section-response border-x border-b pt-1 pb-0.5 px-1.5 mb-1";
+          document
+            .getElementById(`wrap-ollama-conversation-${counter}`)
+            .appendChild(botResponse);
+          document
+            .getElementById(`res-ollama-bot-view-${counter}`)
+            .appendChild(groupBtnCpyMsg);
+          document
+            .getElementById(`group-btn-cpy-msg-${counter}`)
+            .appendChild(botAvatar);
+          document
+            .getElementById(`group-btn-cpy-msg-${counter}`)
+            .appendChild(btnCpyMsg);
 
-            let formattedMessage = message.text.replace(/<pre>/g, `<pre id='code-${counter}'>`);
-            // let formattedMessage = message.text.replace(/(<pre id='code-\d+')>/g, function(match) {
-            //     return `${match}-${counter}>`;
-            // });
-            formattedMessage = formattedMessage.replace(/<button>/g, `<button id='cpy-pre-${counter}' type="button" class="rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400">`);
-            botResponse.innerHTML += `<div id="res-current-bot-o-${counter}">${formattedMessage}</div>`;
+          let _codeCounterGenerated = [];
+          let formattedMessage = message.text.replace(
+            /(<pre id='code-\d+')>/g,
+            function (match, p1) {
+              _codeCounterGenerated.push(p1);
+              return `${match}`;
+            }
+          );
 
-          const actionBtnCpyMsg = document.getElementById(`btn-cpy-msg-${counter}`);
+          formattedMessage = formattedMessage.replace(
+            /<button data-counter=(\d+) id='cpy-pre-(\d+)'>/g,
+            function (match) {
+              return `${match}`;
+            }
+          );
+
+          botResponse.innerHTML += `<div id="res-current-bot-o-${counter}">${formattedMessage}</div>`;
+
+          const actionBtnCpyMsg = document.getElementById(
+            `btn-cpy-msg-${counter}`
+          );
+
           actionBtnCpyMsg.addEventListener("click", (event) => {
             let counterValue = btnCpyMsg.getAttribute("data-counter");
-            const cpyTextMsg = document.getElementById(`res-current-bot-o-${counterValue}`).textContent;
-            navigator.clipboard.writeText(cpyTextMsg).then(function () {
-              vscode.postMessage({ command: "copy", text: cpyTextMsg });
-              console.info('Async: Copying to clipboard was successful!');
-            }, function (err) {
-              console.error('Async: Could not copy text: ', err);
-            });
+            const cpyTextMsg = document.getElementById(
+              `res-current-bot-o-${counterValue}`
+            ).textContent;
+            navigator.clipboard.writeText(cpyTextMsg).then(
+              function () {
+                vscode.postMessage({ command: "copy", text: cpyTextMsg });
+                console.info("Async: Copying to clipboard was successful!");
+              },
+              function (err) {
+                console.error("Async: Could not copy text: ", err);
+              }
+            );
           });
 
-          const actionBtnCpyPre = document.getElementById(`cpy-pre-${counter}`);
-          actionBtnCpyPre.addEventListener("click", (event) => {
-            let counterValue = btnCpyMsg.getAttribute("data-counter");
-            const cpyTextMsg = document.getElementById(`code-${counterValue}`).textContent;
-            navigator.clipboard.writeText(cpyTextMsg).then(function () {
-              vscode.postMessage({ command: "copy", text: cpyTextMsg });
-              console.info('Async: Copying to clipboard was successful!');
-            }, function (err) {
-              console.error('Async: Could not copy text: ', err);
-            });
+          _codeCounterGenerated.map((id) => {
+            let matchId = id.match(/code-(\d+)/);
+            addEventListenerToButton(matchId[1]);
           });
 
           break;
       }
     });
 
-    function sendInfoChat(){
-        counter++;
+    function addEventListenerToButton(i) {
+      const actionBtnCpyPre = document.getElementById(`cpy-pre-${i}`);
+      if (actionBtnCpyPre) {
+        actionBtnCpyPre.addEventListener("click", (event) => {
+          let counterValue = actionBtnCpyPre.getAttribute("data-counter");
 
-        vscode.postMessage({ command: "send", text: requestInput.value });
+          const cpyTextMsg = document.getElementById(`code-${counterValue}`).textContent;
 
-        const wrapConversation = document.createElement("div");
-        wrapConversation.id=`wrap-ollama-conversation-${counter}`;
-        wrapConversation.className="wrap-ollama-conversation";
-
-        const userRequestIn = document.createElement("section");
-        userRequestIn.id = `req-ollama-bot-view-${counter}`;
-        userRequestIn.className = "o-section-request border-t border-x pt-0.5 pb-1 px-1.5";
-
-        const containerConversation = document.createElement("div");
-        containerConversation.id=`container-conversation-${counter}`;
-        containerConversation.className="container-conversation pt-1 flex justify-between mb-1.5";
-
-        const groupBtnDelCpy = document.createElement("div");
-        groupBtnDelCpy.id=`btn-del-cpy-${counter}`;
-        groupBtnDelCpy.className="btn-del-cpy flex flex-row justify-end";
-
-        const groupAvatar = document.createElement("div");
-        groupAvatar.id=`group-avatar-${counter}`;
-        groupAvatar.className="group-avatar";
-        groupAvatar.innerHTML = svgUser;
-
-        const btnDel = document.createElement("button");
-
-        btnDel.id=`btn-del-${counter}`;
-        btnDel.className=`btn-del rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400 p-0.5`;
-        btnDel.title="delete conversation";
-        btnDel.innerHTML = svgDelete;
-        btnDel.setAttribute("data-counter", `${counter}`);
-
-        const btnCpy = document.createElement("button");
-        btnCpy.id=`btn-cpy-${counter}`;
-        btnCpy.className="btn-cpy rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400 p-0.5";
-        btnCpy.innerHTML = svgCopy;
-        btnCpy.title="copy conversation";
-        btnCpy.setAttribute("data-counter", `${counter}`);
-
-        document.getElementById("wrap-ollama-section").appendChild(wrapConversation);
-        document.getElementById(`wrap-ollama-conversation-${counter}`).appendChild(userRequestIn);
-        document.getElementById(`req-ollama-bot-view-${counter}`).appendChild(containerConversation);
-        document.getElementById(`container-conversation-${counter}`).appendChild(groupAvatar);
-        document.getElementById(`container-conversation-${counter}`).appendChild(groupBtnDelCpy);
-        document.getElementById(`btn-del-cpy-${counter}`).appendChild(btnDel);
-        document.getElementById(`btn-del-cpy-${counter}`).appendChild(btnCpy);
-        userRequestIn.innerHTML += `<p id="req-current-bot-o-${counter}">${requestInput.value}</p>`;
-        requestInput.value = "";
-
-        const actionBtnDel = document.getElementById(`btn-del-${counter}`);
-        actionBtnDel.addEventListener("click", (event) => {
-          let counterValue = btnDel.getAttribute("data-counter");
-          document.getElementById(`wrap-ollama-conversation-${counterValue}`).remove();
+          navigator.clipboard.writeText(cpyTextMsg).then(
+            function () {
+              vscode.postMessage({ command: "copy", text: cpyTextMsg });
+              console.info("Async: Copying to clipboard was successful!");
+            },
+            function (err) {
+              console.error("Async: Could not copy text: ", err);
+            }
+          );
         });
+      }
+    }
 
-        const actionBtnCpy = document.getElementById(`btn-cpy-${counter}`);
-        actionBtnCpy.addEventListener("click", (event) => {
-          let counterValue = btnCpy.getAttribute("data-counter");
-          const cpyText = document.getElementById(`req-current-bot-o-${counterValue}`).textContent;
-          navigator.clipboard.writeText(cpyText).then(function () {
+    function sendInfoChat() {
+      counter++;
+
+      vscode.postMessage({ command: "send", text: requestInput.value });
+
+      const wrapConversation = document.createElement("div");
+      wrapConversation.id = `wrap-ollama-conversation-${counter}`;
+      wrapConversation.className = "wrap-ollama-conversation";
+
+      const userRequestIn = document.createElement("section");
+      userRequestIn.id = `req-ollama-bot-view-${counter}`;
+      userRequestIn.className =
+        "o-section-request border-t border-x pt-0.5 pb-1 px-1.5";
+
+      const containerConversation = document.createElement("div");
+      containerConversation.id = `container-conversation-${counter}`;
+      containerConversation.className =
+        "container-conversation pt-1 flex justify-between mb-1.5";
+
+      const groupBtnDelCpy = document.createElement("div");
+      groupBtnDelCpy.id = `btn-del-cpy-${counter}`;
+      groupBtnDelCpy.className = "btn-del-cpy flex flex-row justify-end";
+
+      const groupAvatar = document.createElement("div");
+      groupAvatar.id = `group-avatar-${counter}`;
+      groupAvatar.className = "group-avatar";
+      groupAvatar.innerHTML = svgUser;
+
+      const btnDel = document.createElement("button");
+
+      btnDel.id = `btn-del-${counter}`;
+      btnDel.className = `btn-del rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400 p-0.5`;
+      btnDel.title = "delete conversation";
+      btnDel.innerHTML = svgDelete;
+      btnDel.setAttribute("data-counter", `${counter}`);
+
+      const btnCpy = document.createElement("button");
+      btnCpy.id = `btn-cpy-${counter}`;
+      btnCpy.className =
+        "btn-cpy rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400 p-0.5";
+      btnCpy.innerHTML = svgCopy;
+      btnCpy.title = "copy conversation";
+      btnCpy.setAttribute("data-counter", `${counter}`);
+
+      document
+        .getElementById("wrap-ollama-section")
+        .appendChild(wrapConversation);
+      document
+        .getElementById(`wrap-ollama-conversation-${counter}`)
+        .appendChild(userRequestIn);
+      document
+        .getElementById(`req-ollama-bot-view-${counter}`)
+        .appendChild(containerConversation);
+      document
+        .getElementById(`container-conversation-${counter}`)
+        .appendChild(groupAvatar);
+      document
+        .getElementById(`container-conversation-${counter}`)
+        .appendChild(groupBtnDelCpy);
+      document.getElementById(`btn-del-cpy-${counter}`).appendChild(btnDel);
+      document.getElementById(`btn-del-cpy-${counter}`).appendChild(btnCpy);
+      userRequestIn.innerHTML += `<p id="req-current-bot-o-${counter}">${requestInput.value}</p>`;
+      requestInput.value = "";
+
+      const actionBtnDel = document.getElementById(`btn-del-${counter}`);
+      actionBtnDel.addEventListener("click", (event) => {
+        let counterValue = btnDel.getAttribute("data-counter");
+        document
+          .getElementById(`wrap-ollama-conversation-${counterValue}`)
+          .remove();
+      });
+
+      const actionBtnCpy = document.getElementById(`btn-cpy-${counter}`);
+      actionBtnCpy.addEventListener("click", (event) => {
+        let counterValue = btnCpy.getAttribute("data-counter");
+        const cpyText = document.getElementById(
+          `req-current-bot-o-${counterValue}`
+        ).textContent;
+        navigator.clipboard.writeText(cpyText).then(
+          function () {
             vscode.postMessage({ command: "copy", text: cpyText });
-            console.info('Async: Copying to clipboard was successful!');
-          }, function (err) {
-            console.error('Async: Could not copy text: ', err);
-          });
-        });
-
+            console.info("Async: Copying to clipboard was successful!");
+          },
+          function (err) {
+            console.error("Async: Could not copy text: ", err);
+          }
+        );
+      });
     }
   });
 })();
