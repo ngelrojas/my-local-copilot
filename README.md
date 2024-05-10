@@ -4,11 +4,7 @@
 
 #### TODO
 
-3.0: get all configuration from ollama and put in settings-chat - create a panel
-including to lava-model.
---- send to save parameters. DONE
--- create parameters to chat, the moment both are the same settings. DONE
--- create parameters to the autocomplete, the moment both are the same settings. DONE
+3.5: ISSUE: when pass the model a code and text the message display for the user is bad format, and the response from model is missing format. DOING
 
 2.5: create a button refresh model in settings.
 
@@ -21,6 +17,8 @@ including to lava-model.
 3.3: detect the programming language and put in a box, to select the model chat.
 
 3.4: create a database to save the conversation, when the user close the vscode, the conversation is saved.
+
+3.6: put re-answer button in the response chat.
 
 ### DONE
 
@@ -45,6 +43,12 @@ including to lava-model.
 to response. DONE
 3.6: create a button to delete all conversation and send info using press enter. DONE
 2.3: check don't lose context, when we chat using ollama, in each model - create a prompting setting. DONE
+
+3.0: get all configuration from ollama and put in settings-chat - create a panel
+including to lava-model.
+--- send to save parameters. DONE
+-- create parameters to chat, the moment both are the same settings. DONE
+-- create parameters to the autocomplete, the moment both are the same settings. DONE
 
 - panel admin
 - input for the model chat

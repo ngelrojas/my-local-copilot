@@ -31,8 +31,25 @@ export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conv
     },
   });
 
+  function escapeHtml(unsafe: string) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+  }
+
+
   const codeBlockPattern = /```[\s\S]*?```/g;
   let matches = response.message.content.match(codeBlockPattern);
+
+  if (matches) {
+    matches.forEach((match) => {
+      let modifiedMatch = escapeHtml(match).replace(/^```/, '<pre>').replace(/```$/, '</pre>');
+      response.message.content = response.message.content.replace(match, modifiedMatch);
+    });
+  }
 
   if (matches) {
     matches.forEach((match) => {
@@ -40,6 +57,7 @@ export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conv
       response.message.content = response.message.content.replace(match, modifiedMatch);
     });
   }
+
 
   let splitContent = response.message.content.split(/<\/?pre>/);
   let counter = 0;

@@ -117,17 +117,17 @@
       }
     });
 
-    function addEventListenerToButton(i) {
-      const actionBtnCpyPre = document.getElementById(`cpy-pre-${i}`);
+    function addEventListenerToButton(matchId) {
+      const actionBtnCpyPre = document.getElementById(`cpy-pre-${matchId}`);
       if (actionBtnCpyPre) {
         actionBtnCpyPre.addEventListener("click", (event) => {
-          let counterValue = actionBtnCpyPre.getAttribute("data-counter");
+          let _counterValue = actionBtnCpyPre.getAttribute("data-counter");
 
-          const cpyTextMsg = document.getElementById(`code-${counterValue}`).textContent;
+          const cpyTextMsgPre = document.getElementById(`code-${_counterValue}`).textContent;
 
-          navigator.clipboard.writeText(cpyTextMsg).then(
+          navigator.clipboard.writeText(cpyTextMsgPre).then(
             function () {
-              vscode.postMessage({ command: "copy", text: cpyTextMsg });
+              vscode.postMessage({ command: "copy", text: cpyTextMsgPre });
               console.info("Async: Copying to clipboard was successful!");
             },
             function (err) {
