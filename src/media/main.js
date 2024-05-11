@@ -138,9 +138,18 @@
       }
     }
 
+    function escapeHtml(unsafe) {
+      return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+    }
+
     function sendInfoChat() {
       counter++;
-
+      let _requestInputValue = escapeHtml(requestInput.value);
       vscode.postMessage({ command: "send", text: requestInput.value });
 
       const wrapConversation = document.createElement("div");
@@ -199,7 +208,7 @@
         .appendChild(groupBtnDelCpy);
       document.getElementById(`btn-del-cpy-${counter}`).appendChild(btnDel);
       document.getElementById(`btn-del-cpy-${counter}`).appendChild(btnCpy);
-      userRequestIn.innerHTML += `<p id="req-current-bot-o-${counter}">${requestInput.value}</p>`;
+      userRequestIn.innerHTML += `<p id="req-current-bot-o-${counter}">${_requestInputValue}</p>`;
       requestInput.value = "";
 
       const actionBtnDel = document.getElementById(`btn-del-${counter}`);
