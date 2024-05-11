@@ -5,6 +5,8 @@
 #### TODO
 
 what is <button type='submit'> in html and give me an example, please?
+what is <input type='text'> in html and give me an example, please?
+what is "<input type='text'>" in html and give me an example, please?
 
 3.5: ISSUE: when pass the model a code and text the message display for the user is bad format, and the response from model is missing format. DOING
 
