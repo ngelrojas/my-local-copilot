@@ -1,4 +1,5 @@
 import ollama from "ollama";
+import { v4 as uuidv4 } from "uuid";
 import {  apiTemperature } from "../autocomplete/config";
 let {numPredict} = require("../autocomplete/config");
 numPredict = parseInt(numPredict);
@@ -40,74 +41,25 @@ export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conv
         .replace(/'/g, "&#039;");
   }
 
-  console.log("===============original response===============");
-  console.log(response.message.content);
-  console.log("===============================================");
-
   const codeBlockPattern = /```[\s\S]*?```/g;
   let matches = response.message.content.match(codeBlockPattern);
-  let counter = 0;
-
-  console.log("===============MATCHES===============");
-  console.log(matches);
-  console.log("===============================================");
+  let counter = '';
 
   if (matches) {
     matches.forEach((match) => {
-      counter = counter + 1;
-      // let replacePreTag = `<pre id='code-${counter}'>`;
       let modifiedMatch = escapeHtml(match).replace(/^```/, '<pre>').replace(/```$/, '</pre>');
-      // let modifiedMatch = escapeHtml(match).replace(/^```/, `<pre id='code-${counter}'>`).replace(/```$/, '</pre>');
       response.message.content = response.message.content.replace(match, modifiedMatch);
     });
   }
-  console.log("===============FIRST MATCHES replacing tags html to escapeHTML===============");
-  console.log(response.message.content);
-  console.log("===============================================");
-
-  // if (matches) {
-  //   matches.forEach((match) => {
-  //     let modifiedMatch = match.replace(/^```/, '<pre>').replace(/```$/, '</pre>');
-  //     response.message.content = response.message.content.replace(match, modifiedMatch);
-  //   });
-  // }
-  // console.log("===============SECOND MATCHES replacing back sticky for pre tags===============");
-  // console.log(response.message.content);
-  // console.log("===============================================");
 
   let splitContent = response.message.content.split(/<\/?pre>/);
-  // let splitContent = response.message.content.split(/<\/?pre[^>]*>/);
-  // let splitContent = response.message.content.split(/(?<=<\/?pre>)/);
-  console.log("===============SPLIT CONTENT===============");
-  console.log(splitContent);
-  console.log("===============================================");
-  // for (let i = 0; i < splitContent.length; i++) {
-  //   let match = splitContent[i].match(/<pre>/);
-  //   console.log(`Match found at index ${i}: ${match?.[i]}`);
-  //   // if (match) {
-  //   //   splitContent[i] = `<div class="code-pre"><div class="flex justify-end"><button id='cpy-pre-${counter}' data-counter='${counter}' type="button" class="rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400">${svgCopy}</button></div>` + splitContent[i] + `</div>`;
-  //   // }
-  //   // else{
-  //   //   splitContent[i] = '<p>' + splitContent[i] + '</p>';
-  //   // }
-  // }
+
   for (let i = 0; i < splitContent.length; i++) {
-    console.log(`Content found at index ${i}: ${splitContent[i]}`);
-      // Check if the current element contains a <pre> tag
-      // if (splitContent[i].includes('<pre>')) {
-      //     // Extract the content inside the <pre> tags
-      //     let content = splitContent[i].split(/<pre>|<\/pre>/)[i];
-      //     console.log(`Content found at index ${i}: ${content}`);
-      // }
-  }
-  // let counter = 0;
-  for (let i = 0; i < splitContent.length; i++) {
-    counter = counter + 1;
+    counter = uuidv4();
     if (i % 2 === 0) {
       splitContent[i] = '<p>' + escapeHtml(splitContent[i]) + '</p>';
     } else {
       splitContent[i] = `<div class="code-pre"><div class="flex justify-end"><button id='cpy-pre-${counter}' data-counter='${counter}' type="button" class="rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400">${svgCopy}</button></div><pre id='code-${counter}'>` + splitContent[i] + `</pre></div>`;
-      // splitContent[i] = `<div class="code-pre"><div class="flex justify-end"><button id='cpy-pre-${counter}' data-counter='${counter}' type="button" class="rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400">${svgCopy}</button></div>` + splitContent[i] + `</div>`;
     }
   }
 

@@ -72,9 +72,10 @@
 
           let _codeCounterGenerated = [];
           let formattedMessage = message.text.replace(
-            /(<pre id='code-\d+')>/g,
+              /(<pre id='code-[^>]+)>/g,
             function (match, p1) {
-              _codeCounterGenerated.push(p1);
+              let _p1 = p1 + ">";
+              _codeCounterGenerated.push(_p1);
               return `${match}`;
             }
           );
@@ -107,10 +108,15 @@
               }
             );
           });
-
           _codeCounterGenerated.map((id) => {
-            let matchId = id.match(/code-(\d+)/);
-            addEventListenerToButton(matchId[1]);
+            let matchId = id.match(/code-([^>]+)(?=>)/);
+            if (matchId && matchId[1]) {
+              let uuid = matchId[1];
+              if (uuid.endsWith("'")) {
+                uuid = uuid.slice(0, -1);
+              }
+              addEventListenerToButton(uuid);
+            }
           });
 
           break;
@@ -119,6 +125,7 @@
 
     function addEventListenerToButton(matchId) {
       const actionBtnCpyPre = document.getElementById(`cpy-pre-${matchId}`);
+      console.log("actionBtnCpyPre", actionBtnCpyPre);
       if (actionBtnCpyPre) {
         actionBtnCpyPre.addEventListener("click", (event) => {
           let _counterValue = actionBtnCpyPre.getAttribute("data-counter");
