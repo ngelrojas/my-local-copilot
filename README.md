@@ -8,17 +8,13 @@ what is <button type='submit'> in html and give me an example, please?
 what is <input type='text'> in html and give me an example, please?
 what is "<input type='text'>" in html and give me an example, please?
 
-3.5: ISSUE: when pass the model a code and text the message display for the user is bad format, and the response from model is missing format. DOING
-
 2.5: create a button refresh model in settings.
 
-2.8: ISSUE: when selected other option, like a display-plugins, the chat lost all conversation.
+2.8: ISSUE: when selected other option in the left side menu, like a display-plugins, the chat lost all conversation.
 
 2.9: include lava-model to processing images.
 
 3.1: create a settings to pull models from ollama, using a button or something similar, ollama should be installed an running.
-
-3.3: detect the programming language and put in a box, to select the model chat.
 
 3.4: create a database to save the conversation, when the user close the vscode, the conversation is saved.
 
@@ -54,6 +50,10 @@ including to lava-model.
 -- create parameters to chat, the moment both are the same settings. DONE
 -- create parameters to the autocomplete, the moment both are the same settings. DONE
 
+3.5: ISSUE: when pass the model a code and text the message display for the user is bad format, and the response from model is missing format. DONE
+
+3.3: detect the programming language and put in a box, to select the model chat. DONE
+
 - panel admin
 - input for the model chat
 - retrieve answers from model in vscode
@@ -76,3 +76,7 @@ below name suggestions for the chat-copilot interface
 -==OLLAMA_COPILOT
 -==OLLAMA_PILOT
 -==OLLAMA_CODE_PILOT
+
+import React from 'react';
+
+could you explain me what is console.log in javascript and give me an example how to usin in a debug mode, please?

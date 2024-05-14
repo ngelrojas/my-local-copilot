@@ -1,5 +1,6 @@
 import ollama from "ollama";
 import { v4 as uuidv4 } from "uuid";
+import { OLLAMA_ROLES } from "../constants/ollamaConstant";
 import {  apiTemperature } from "../autocomplete/config";
 let {numPredict} = require("../autocomplete/config");
 numPredict = parseInt(numPredict);
@@ -19,7 +20,7 @@ const svgCopy = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" 
 export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conversationHistory: Message[]) => {
 
   conversationHistory.push({
-    role: "user",
+    role: OLLAMA_ROLES.USER,
     content: `${inputMsg.question} ${inputMsg.code}`,
   });
 
@@ -63,13 +64,11 @@ export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conv
     }
   }
 
-
-
   const formattedContent = splitContent.join("");
 
   conversationHistory.push(
     {
-      role: "assistant",
+      role: OLLAMA_ROLES.ASSISTANT,
       content: response.message.content,
     },
   );

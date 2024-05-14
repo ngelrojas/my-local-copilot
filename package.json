@@ -103,7 +103,7 @@
         {
           "type": "webview",
           "id": "ollama-chat-pilot",
-          "name": "Ollama Chat Pilot"
+          "name": "My Local Copilot"
         }
       ]
     },
@@ -111,7 +111,7 @@
       "activitybar": [
         {
           "id": "ollama-chat-pilot",
-          "title": "Ollama Chat Pilot",
+          "title": "My Local Copilot",
           "icon": "src/images/icons/ollama-chat.svg"
         }
       ]

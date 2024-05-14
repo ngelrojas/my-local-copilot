@@ -125,7 +125,7 @@
 
     function addEventListenerToButton(matchId) {
       const actionBtnCpyPre = document.getElementById(`cpy-pre-${matchId}`);
-      console.log("actionBtnCpyPre", actionBtnCpyPre);
+
       if (actionBtnCpyPre) {
         actionBtnCpyPre.addEventListener("click", (event) => {
           let _counterValue = actionBtnCpyPre.getAttribute("data-counter");
