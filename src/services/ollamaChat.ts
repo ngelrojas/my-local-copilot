@@ -60,7 +60,7 @@ export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conv
     if (i % 2 === 0) {
       splitContent[i] = '<p>' + escapeHtml(splitContent[i]) + '</p>';
     } else {
-      splitContent[i] = `<div class="code-pre"><div class="flex justify-end"><button id='cpy-pre-${counter}' data-counter='${counter}' type="button" class="rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400">${svgCopy}</button></div><pre id='code-${counter}'>` + splitContent[i] + `</pre></div>`;
+      splitContent[i] = `<div class="code-pre"><div class="flex justify-end"><button id='cpy-pre-${counter}' data-counter='${counter}' type="button" class=" text-gray-500 opacity-50 hover:opacity-100 hover:text-slate-400">${svgCopy}</button></div><pre id='code-${counter}'>` + splitContent[i] + `</pre></div>`;
     }
   }
 

@@ -8,6 +8,8 @@ what is <button type='submit'> in html and give me an example, please?
 what is <input type='text'> in html and give me an example, please?
 what is "<input type='text'>" in html and give me an example, please?
 
+3.6: put re-answer button in the response chat.
+
 2.5: create a button refresh model in settings.
 
 2.8: ISSUE: when selected other option in the left side menu, like a display-plugins, the chat lost all conversation.
@@ -17,8 +19,6 @@ what is "<input type='text'>" in html and give me an example, please?
 3.1: create a settings to pull models from ollama, using a button or something similar, ollama should be installed an running.
 
 3.4: create a database to save the conversation, when the user close the vscode, the conversation is saved.
-
-3.6: put re-answer button in the response chat.
 
 ### DONE
 
