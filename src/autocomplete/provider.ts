@@ -9,12 +9,13 @@ import {
 let {responsePreviewMaxTokens} = require('./config');
 responsePreviewMaxTokens = parseInt(responsePreviewMaxTokens);
 import axios from "axios";
+import { OLLAMA_COMMAND } from "../constants/ollamaConstant";
 import {messageHeaderSub} from "./MessageHeaderSub";
 
 export async function provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, cancellationToken: vscode.CancellationToken) {
 
     // Create a completion item
-    const item = new vscode.CompletionItem("Autocomplete with Ollama");
+    const item = new vscode.CompletionItem(OLLAMA_COMMAND.COMPLETE);
 
     // Set the insert text to a placeholder
     item.insertText = new vscode.SnippetString('${1:}');
@@ -42,7 +43,7 @@ export async function provideCompletionItems(document: vscode.TextDocument, posi
         }, {
             cancelToken: new axios.CancelToken((c) => {
                 const cancelPost = function () {
-                    c("Autocompletion request terminated by completion cancel");
+                    c(OLLAMA_COMMAND.CANCEL);
                 };
                 cancellationToken.onCancellationRequested(cancelPost);
             })
@@ -55,12 +56,12 @@ export async function provideCompletionItems(document: vscode.TextDocument, posi
     }
 
     // Set the documentation to a message
-    item.documentation = new vscode.MarkdownString('Press `Enter` to get an autocompletion from Ollama');
+    item.documentation = new vscode.MarkdownString(OLLAMA_COMMAND.PRESS);
     // Set the command to trigger the completion
     if (continueInline || !responsePreview){
         item.command = {
             command: 'mylocal-autocoder.autocomplete',
-            title: 'Autocomplete with Ollama',
+            title: OLLAMA_COMMAND.TITLE,
             arguments: [cancellationToken]
         };
     }

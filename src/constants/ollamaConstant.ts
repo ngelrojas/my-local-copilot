@@ -39,3 +39,19 @@ export const OLLAMA_SETTING = {
     TEMPERATURE: "Temperature",
   }
 };
+
+export const OLLAMA_COMMAND = {
+  TITLE: "LocalCopilot Autocomplete",
+  PROGRESS: "Starting model...",
+  CANCEL: "Autocompletion request terminated by user cancel",
+  GENERATING: "Generating...",
+  FINISHED: "Autocompletion request completed",
+  ERROR: "Failed to generate autocompletion",
+  COMPLETE: "Autocompletion with My Local Copilot",
+  PRESS: 'Press `Enter` to get an autocompletion from My Local Copilot',
+};
+
+export const OLLAMA_ROLES = {
+    USER: "user",
+    ASSISTANT: "assistant"
+}

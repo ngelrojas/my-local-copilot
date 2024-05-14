@@ -1,4 +1,6 @@
 import ollama from "ollama";
+import { v4 as uuidv4 } from "uuid";
+import { OLLAMA_ROLES } from "../constants/ollamaConstant";
 import {  apiTemperature } from "../autocomplete/config";
 let {numPredict} = require("../autocomplete/config");
 numPredict = parseInt(numPredict);
@@ -18,7 +20,7 @@ const svgCopy = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" 
 export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conversationHistory: Message[]) => {
 
   conversationHistory.push({
-    role: "user",
+    role: OLLAMA_ROLES.USER,
     content: `${inputMsg.question} ${inputMsg.code}`,
   });
 
@@ -31,22 +33,32 @@ export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conv
     },
   });
 
+  function escapeHtml(unsafe: string) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+  }
+
   const codeBlockPattern = /```[\s\S]*?```/g;
   let matches = response.message.content.match(codeBlockPattern);
+  let counter = '';
 
   if (matches) {
     matches.forEach((match) => {
-      let modifiedMatch = match.replace(/^```/, '<pre>').replace(/```$/, '</pre>');
+      let modifiedMatch = escapeHtml(match).replace(/^```/, '<pre>').replace(/```$/, '</pre>');
       response.message.content = response.message.content.replace(match, modifiedMatch);
     });
   }
 
   let splitContent = response.message.content.split(/<\/?pre>/);
-  let counter = 0;
+
   for (let i = 0; i < splitContent.length; i++) {
-    counter = counter + 1;
+    counter = uuidv4();
     if (i % 2 === 0) {
-      splitContent[i] = '<p>' + splitContent[i] + '</p>';
+      splitContent[i] = '<p>' + escapeHtml(splitContent[i]) + '</p>';
     } else {
       splitContent[i] = `<div class="code-pre"><div class="flex justify-end"><button id='cpy-pre-${counter}' data-counter='${counter}' type="button" class="rounded-sm bg-gray-500 opacity-50 hover:opacity-100 hover:bg-slate-400">${svgCopy}</button></div><pre id='code-${counter}'>` + splitContent[i] + `</pre></div>`;
     }
@@ -56,7 +68,7 @@ export const OllamaChat = async (inputModel: String, inputMsg: userRequest, conv
 
   conversationHistory.push(
     {
-      role: "assistant",
+      role: OLLAMA_ROLES.ASSISTANT,
       content: response.message.content,
     },
   );

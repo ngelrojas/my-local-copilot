@@ -77,7 +77,7 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
         vscode.Uri.joinPath(this.context.extensionUri, "src/media", "tailwindcss.3.2.4.min.js")
     );
     const svgSend = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="fill-gray-400" d="m12.815 12.197l-7.532 1.255a.5.5 0 0 0-.386.318L2.3 20.728c-.248.64.421 1.25 1.035.942l18-9a.75.75 0 0 0 0-1.341l-18-9c-.614-.307-1.283.303-1.035.942l2.598 6.958a.5.5 0 0 0 .386.318l7.532 1.255a.2.2 0 0 1 0 .395"/></svg>`;
-    const svgDelete = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z"/></svg>`;
+    const svgDelete = `<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" d="M15 12H9"/></g></svg>`;
 
     return `
       <!DOCTYPE html>
@@ -89,24 +89,22 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
         <link href='${stylesMainUri}' rel="stylesheet" />
         <script src='${scriptTailwindJsUri}'></script>
         <script src='${scriptMainUri}'></script>
-        <title>Ollama Chatbot</title>
+        <title>My Local Copilot</title>
       </head>
       <body>
         <main>
         
             <div class="relative wrap-ol">
             
-              <div class="overflow-scroll mb-12 wrapp-all-conversation-ollama">
+              <div class="overflow-scroll mb-16 wrapp-all-conversation-ollama">
                   <div class="sticky top-0 flex justify-end bg-slate-800 p-2 btn-options-ollama" id="del-all-chats">
                       <button class="del-all-chats">${svgDelete}</button>
                   </div>
-                  <section class="wrap-ollama-section mt-8" id="wrap-ollama-section">
-                  </section>
+                  <section class="wrap-ollama-section mt-0.5" id="wrap-ollama-section" />
               </div>
               
-              
               <div class="absolute bottom-0 w-full flex flex-row my-0.5" id="chatForm">
-                <textarea class="p-1 text-black w-full rounded-l-sm text-dynamic" name="" id="send-req-ollama-bot" placeholder="Type your message here" cols="30"></textarea>
+                <textarea class="p-2 text-black w-full rounded-l-sm text-dynamic" name="" id="send-req-ollama-bot" placeholder="Type your message here" cols="30"></textarea>
                 
                 <button class="p-1 bg-slate-400 w-1/7 flex justify-center items-center rounded-r-sm" id="send">
                     ${svgSend}

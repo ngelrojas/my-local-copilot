@@ -72,9 +72,10 @@
 
           let _codeCounterGenerated = [];
           let formattedMessage = message.text.replace(
-            /(<pre id='code-\d+')>/g,
+              /(<pre id='code-[^>]+)>/g,
             function (match, p1) {
-              _codeCounterGenerated.push(p1);
+              let _p1 = p1 + ">";
+              _codeCounterGenerated.push(_p1);
               return `${match}`;
             }
           );
@@ -107,27 +108,33 @@
               }
             );
           });
-
           _codeCounterGenerated.map((id) => {
-            let matchId = id.match(/code-(\d+)/);
-            addEventListenerToButton(matchId[1]);
+            let matchId = id.match(/code-([^>]+)(?=>)/);
+            if (matchId && matchId[1]) {
+              let uuid = matchId[1];
+              if (uuid.endsWith("'")) {
+                uuid = uuid.slice(0, -1);
+              }
+              addEventListenerToButton(uuid);
+            }
           });
 
           break;
       }
     });
 
-    function addEventListenerToButton(i) {
-      const actionBtnCpyPre = document.getElementById(`cpy-pre-${i}`);
+    function addEventListenerToButton(matchId) {
+      const actionBtnCpyPre = document.getElementById(`cpy-pre-${matchId}`);
+
       if (actionBtnCpyPre) {
         actionBtnCpyPre.addEventListener("click", (event) => {
-          let counterValue = actionBtnCpyPre.getAttribute("data-counter");
+          let _counterValue = actionBtnCpyPre.getAttribute("data-counter");
 
-          const cpyTextMsg = document.getElementById(`code-${counterValue}`).textContent;
+          const cpyTextMsgPre = document.getElementById(`code-${_counterValue}`).textContent;
 
-          navigator.clipboard.writeText(cpyTextMsg).then(
+          navigator.clipboard.writeText(cpyTextMsgPre).then(
             function () {
-              vscode.postMessage({ command: "copy", text: cpyTextMsg });
+              vscode.postMessage({ command: "copy", text: cpyTextMsgPre });
               console.info("Async: Copying to clipboard was successful!");
             },
             function (err) {
@@ -138,9 +145,18 @@
       }
     }
 
+    function escapeHtml(unsafe) {
+      return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+    }
+
     function sendInfoChat() {
       counter++;
-
+      let _requestInputValue = escapeHtml(requestInput.value);
       vscode.postMessage({ command: "send", text: requestInput.value });
 
       const wrapConversation = document.createElement("div");
@@ -199,7 +215,7 @@
         .appendChild(groupBtnDelCpy);
       document.getElementById(`btn-del-cpy-${counter}`).appendChild(btnDel);
       document.getElementById(`btn-del-cpy-${counter}`).appendChild(btnCpy);
-      userRequestIn.innerHTML += `<p id="req-current-bot-o-${counter}">${requestInput.value}</p>`;
+      userRequestIn.innerHTML += `<p id="req-current-bot-o-${counter}">${_requestInputValue}</p>`;
       requestInput.value = "";
 
       const actionBtnDel = document.getElementById(`btn-del-${counter}`);

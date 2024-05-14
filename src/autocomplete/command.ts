@@ -1,5 +1,6 @@
 import vscode from "vscode";
 import {apiEndpoint, apiModel, apiTemperature, promptWindowSize} from "./config";
+import { OLLAMA_COMMAND } from "../constants/ollamaConstant";
 
 let {numPredict} = require('./config');
 numPredict = parseInt(numPredict);
@@ -19,17 +20,17 @@ export async function autocompleteCommand(textEditor: vscode.TextEditor, cancell
     vscode.window.withProgress(
         {
             location: vscode.ProgressLocation.Notification,
-            title: "Ollama Autocoder",
+            title: OLLAMA_COMMAND.TITLE,
             cancellable: true,
         },
         async (progress, progressCancellationToken) => {
             try {
-                progress.report({ message: "Starting model..." });
+                progress.report({ message: OLLAMA_COMMAND.PROGRESS });
 
                 let axiosCancelPost: () => void;
                 const axiosCancelToken = new axios.CancelToken((c) => {
                     const cancelPost = function () {
-                        c("Autocompletion request terminated by user cancel");
+                        c(OLLAMA_COMMAND.CANCEL);
                     };
                     axiosCancelPost = cancelPost;
                     if (cancellationToken){
@@ -39,7 +40,6 @@ export async function autocompleteCommand(textEditor: vscode.TextEditor, cancell
                     vscode.workspace.onDidCloseTextDocument(cancelPost);
                 });
 
-                // Make a request to the ollama.ai REST API
                 const response = await axios.post(apiEndpoint, {
                         model: apiModel, // Change this to the model you want to use
                         prompt: messageHeaderSub(textEditor.document) + prompt,
@@ -60,7 +60,7 @@ export async function autocompleteCommand(textEditor: vscode.TextEditor, cancell
                 let currentPosition = position;
 
                 response.data.on('data', async (d: Uint8Array) => {
-                    progress.report({ message: "Generating..." });
+                    progress.report({ message: OLLAMA_COMMAND.GENERATING });
 
                     // Check for user input (cancel)
                     if (currentPosition.line !== textEditor.selection.end.line || currentPosition.character !== textEditor.selection.end.character) {
@@ -94,7 +94,7 @@ export async function autocompleteCommand(textEditor: vscode.TextEditor, cancell
                     currentPosition = newPosition;
 
                     // completion bar
-                    progress.report({ message: "Generating...", increment: 1 / (numPredict / 100) });
+                    progress.report({ message: OLLAMA_COMMAND.GENERATING, increment: 1 / (numPredict / 100) });
 
                     // move cursor
                     textEditor.selection = newSelection;
@@ -103,7 +103,7 @@ export async function autocompleteCommand(textEditor: vscode.TextEditor, cancell
                 // Keep cancel window available
                 const finished = new Promise((resolve) => {
                     response.data.on('end', () => {
-                        progress.report({ message: "Ollama completion finished." });
+                        progress.report({ message: OLLAMA_COMMAND.FINISHED });
                         resolve(true);
                     });
                     axiosCancelToken.promise.finally(() => { // prevent notification from freezing on user input cancel
@@ -114,11 +114,9 @@ export async function autocompleteCommand(textEditor: vscode.TextEditor, cancell
                 await finished;
 
             } catch (err: any) {
-                // Show an error message
                 vscode.window.showErrorMessage(
-                    "Ollama encountered an error: " + err.message
+                    `${OLLAMA_COMMAND.ERROR}: ${err.message}`
                 );
-                console.log(err);
             }
         }
     );
