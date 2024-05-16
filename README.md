@@ -8,7 +8,7 @@ what is <button type='submit'> in html and give me an example, please?
 what is <input type='text'> in html and give me an example, please?
 what is "<input type='text'>" in html and give me an example, please?
 
-3.6: put re-answer button in the response chat.
+3.6: put re-answer button in the response chat. DOING
 
 2.5: create a button refresh model in settings.
 
