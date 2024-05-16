@@ -1,7 +1,7 @@
 {
-  "name": "my-local-copilot",
-  "displayName": "my-local-copilot",
-  "description": "",
+  "name": "ollama-script-code",
+  "displayName": "ollama-script-code",
+  "description": "ollama-script-code is a Visual Studio Code extension that provides autocompletion and chat for code using the Ollama models.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.88.0"
@@ -10,7 +10,10 @@
     "Machine Learning",
     "Natural Language Processing",
     "Productivity",
-    "programming languages"
+    "programming languages",
+    "Data Science",
+    "Formatters",
+    "Linters"
   ],
   "keywords": [
     "ollama",
@@ -20,7 +23,12 @@
     "natural language processing",
     "machine learning",
     "productivity",
-    "programming languages"
+    "programming languages",
+    "ai",
+    "openai",
+    "testing",
+    "gemini",
+    "gpt"
   ],
   "activationEvents": [
     "onCommand:ollama-chat-pilot.activate"
@@ -38,7 +46,7 @@
       }
     ],
     "configuration": {
-      "title": "My Local Copilot",
+      "title": "Ollama Script Code",
       "properties": {
         "my-local-copilot.model": {
           "type": "object",
@@ -103,7 +111,7 @@
         {
           "type": "webview",
           "id": "ollama-chat-pilot",
-          "name": "My Local Copilot"
+          "name": "Ollama Script Code"
         }
       ]
     },
@@ -111,7 +119,7 @@
       "activitybar": [
         {
           "id": "ollama-chat-pilot",
-          "title": "My Local Copilot",
+          "title": "Ollama Script Code",
           "icon": "src/images/icons/ollama-chat.svg"
         }
       ]

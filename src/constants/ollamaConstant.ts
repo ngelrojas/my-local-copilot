@@ -41,14 +41,14 @@ export const OLLAMA_SETTING = {
 };
 
 export const OLLAMA_COMMAND = {
-  TITLE: "LocalCopilot Autocomplete",
+  TITLE: "OllamaScriptCode Autocomplete",
   PROGRESS: "Starting model...",
   CANCEL: "Autocompletion request terminated by user cancel",
   GENERATING: "Generating...",
   FINISHED: "Autocompletion request completed",
   ERROR: "Failed to generate autocompletion",
-  COMPLETE: "Autocompletion with My Local Copilot",
-  PRESS: 'Press `Enter` to get an autocompletion from My Local Copilot',
+  COMPLETE: "Autocompletion with OllamaScriptCode",
+  PRESS: 'Press `Enter` to get an autocompletion from OllamaScriptCode',
 };
 
 export const OLLAMA_ROLES = {
