@@ -156,6 +156,10 @@
       loadResponseSec_1.id = `loading-1-${counter}`;
       loadResponseSec_1.className = "animate-pulse flex space-x-4";
 
+      const loadResponseAvatar = document.createElement("div");
+      loadResponseAvatar.id = `avatar-${counter}`;
+      loadResponseAvatar.className = "rounded-full bg-slate-700 h-8 w-8";
+
       const loadResponseSec_2 = document.createElement("div");
       loadResponseSec_2.id = `loading-2-${counter}`;
       loadResponseSec_2.className = "flex-1 space-y-2 py-1";
@@ -234,6 +238,7 @@
 
       document.getElementById(`wrap-ollama-conversation-${counter}`).appendChild(loadResponseWrap);
       document.getElementById(`loading-${counter}`).appendChild(loadResponseSec_1);
+      document.getElementById(`loading-1-${counter}`).appendChild(loadResponseAvatar);
       document.getElementById(`loading-1-${counter}`).appendChild(loadResponseSec_2);
       document.getElementById(`loading-2-${counter}`).appendChild(loadResponseSec_3);
       document.getElementById(`loading-2-${counter}`).appendChild(loadResponseSec_4);

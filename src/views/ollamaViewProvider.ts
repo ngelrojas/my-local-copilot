@@ -89,7 +89,7 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
         <link href='${stylesMainUri}' rel="stylesheet" />
         <script src='${scriptTailwindJsUri}'></script>
         <script src='${scriptMainUri}'></script>
-        <title>My Local Copilot</title>
+        <title>Ollama Script Code</title>
       </head>
       <body>
         <main>
