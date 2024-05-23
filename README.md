@@ -8,7 +8,13 @@ what is <button type='submit'> in html and give me an example, please?
 what is <input type='text'> in html and give me an example, please?
 what is "<input type='text'>" in html and give me an example, please?
 
-3.6: put re-answer button in the response chat. DOING
+
+3.9: integration sqlite3 to save the conversation, crud operations. DOING
+
+3.8: create a button to delete all conversation in the history
+
+
+================================================================================
 
 2.5: create a button refresh model in settings.
 
@@ -54,11 +60,9 @@ including to lava-model.
 
 3.3: detect the programming language and put in a box, to select the model chat. DONE
 
-- panel admin
-- input for the model chat
-- retrieve answers from model in vscode
-- selected text and send to the model and the answer is displayed in the vscode
-  1.6 create a chat to test a model like a chat-copilot interface.
+3.6: put re-answer button in the response chat. DONE
+
+3.7: create a modal for history conversation DONE
 
 ### tip
 
@@ -80,3 +84,10 @@ below name suggestions for the chat-copilot interface
 import React from 'react';
 
 could you explain me what is console.log in javascript and give me an example how to usin in a debug mode, please?
+
+### script to run sqlite
+- first install npm install sqlite3
+- second install npm -g install ts-node
+```bash 
+  ts-node src/core/migrations/createTables.ts
+```

@@ -126,6 +126,8 @@ table {
 :root{
   --border-x: 0.5px solid #ddd;
   --text-wrap: pretty;
+  --bg-color: #21262d;
+  --bg-color-hover: rgba(44, 52, 60, 0.15);
 }
 /*
     styles for chat bot ollama
@@ -189,4 +191,13 @@ main > .wrap-ol {
 }
 .code-pre > pre{
   text-wrap: var(--text-wrap);
+}
+.bg-dark-modal{
+  background-color: var(--bg-color);
+}
+.bg-dark-modal-hover{
+  background-color: var(--bg-color-hover);
+}
+.table-history > tbody > tr:hover{
+  cursor: pointer;
 }

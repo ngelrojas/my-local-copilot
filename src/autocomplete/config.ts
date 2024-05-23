@@ -15,8 +15,8 @@ export let continueInline: boolean | undefined;
 
 export function updateVSConfig() {
     VSConfig = vscode.workspace.getConfiguration("mylocal-autocoder");
-    apiEndpoint = VSConfig.get("endpoint") || "http://localhost:11434/api/generate";
     const config = vscode.workspace.getConfiguration("my-local-copilot");
+    apiEndpoint = VSConfig.get("endpoint") || "http://localhost:11434/api/generate";
     apiModel = config.get("model") as string;
     apiMessageHeader = VSConfig.get("message header") || "";
     numPredict = VSConfig.get("max tokens predicted") || 1000;

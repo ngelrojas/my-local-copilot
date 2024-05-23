@@ -116,35 +116,60 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
               
             </div>
 <!--modal init-->
-
 <div class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="modalHistory">
   <div class="flex items-start justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-    <div class="inline-block align-top bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+    <div class="w-80 inline-block align-top rounded text-left overflow-hidden transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
       <!-- Header -->
-      <div class="bg-gray-50 px-4 py-3 sm:px-6 flex sm:flex sm:flex-row">
-        <button type="button" class="flex justify-start shadow-sm text-black  sm:ml-3 sm:w-auto sm:text-sm" id="closeModal">
+      <div class="bg-dark-modal px-4 py-1 sm:px-6 flex sm:flex sm:flex-row">
+        <button type="button" class="flex items-center justify-start shadow-sm text-white  sm:ml-3 sm:w-auto sm:text-sm" id="closeModal">
             ${svgClose}
         </button>
-        <h3 class="flex justify-end text-gray-900 flex-grow" id="modal-title">
+        <h3 class="flex justify-end text-white flex-grow" id="modal-title">
           Recent Conversation
         </h3>
       </div>
       <!-- Content -->
-      <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+      <div class="bg-dark-modal px-4 pt-1 pb-1 sm:p-6 sm:pb-4">
         <div class="sm:flex sm:items-start">
           <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-            <div class="mt-2">
-              <p class="text-sm text-gray-500">
-                Your modal content goes here.
-              </p>
+            <div class="mt-2 flex justify-center">
+              <table class="table-auto table-history w-full">
+                <tbody id="historyChats">
+                    <tr>
+                        <td>1</td>
+                        <td>how to render</td>
+                        <td>1day 21hours ago</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>how to render</td>
+                        <td>1day 21hours ago</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>how to render</td>
+                        <td>1day 21hours ago</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>how to render</td>
+                        <td>1day 21hours ago</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>how to render</td>
+                        <td>1day 21hours ago</td>
+                    </tr>
+                </tbody>
+                </table>
             </div>
           </div>
         </div>
       </div>
       <!-- Footer -->
-      <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-        <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" id="viewAllHistory">
+      <div class="bg-dark-modal px-4 py-2 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button type="button" class="w-full inline-flex justify-center rounded border border-transparent shadow-sm px-4 py-1 text-white hover:bg-dark-modal-hover sm:ml-3 sm:w-auto sm:text-sm" id="viewAllHistory">
           View All History
         </button>
       </div>
@@ -153,8 +178,6 @@ export class OllamaViewProvider implements vscode.WebviewViewProvider {
 </div>
 <!--modal end--> 
         </main>
-
-
       </body>
       </html>`;
   }

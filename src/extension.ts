@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.registerWebviewViewProvider("ollama-chat-pilot", provider)
   );
 
-    checkOllamaRunning();
+  checkOllamaRunning();
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
